@@ -13,6 +13,9 @@
 - Web Worker for the force layout.
 - **Fourth source added: Allen's Keynotes with Comparisons** (+584 relationships, corroboration 807→928).
 - Visible dark-mode toggle.
+- **Full-length keynotes** (no truncation) + a full-text reader with copy.
+- **7-step guided tutorial** (auto-runs on first visit) and a clearer start state.
+- Cleaner start state with example actions.
 
 ## Still open (all offline)
 
