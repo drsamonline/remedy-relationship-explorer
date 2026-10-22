@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+target/
+.gradle/
+*.log
+.DS_Store
+desktop/src-tauri/target/
+mobile/android/
+mobile/ios/
+*.apk
+*.aab
+*.exe
+*.msi
