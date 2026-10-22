@@ -3,6 +3,21 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.3] — 2026-10-22
+
+### Fixed
+- **The remedy card vanished the moment you moved the mouse toward it**, so you could never scroll it
+  or click through to the reader. The card is now **pinned while the pointer is over it**, and moving
+  toward it no longer dismisses it.
+- Added a **keyboard shortcut**: with the card open, press **Enter** (or **F**) to open the full-text
+  reader for that remedy. **Esc** closes the card.
+- **Clicking the card** now opens the reader directly; the hint reads
+  *"Click, or press Enter, to open the reader"* and the card shows a pointer cursor.
+
+### Verified
+- 6 card-interaction scenarios pass (hover, move-onto-card, Enter, F, click, Esc).
+- 8 tooltip-state scenarios pass; 6 viewports clean; 54 functional checks pass.
+
 ## [1.6.2] — 2026-10-22
 
 ### Fixed
