@@ -3,6 +3,18 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.2.1] — 2026-10-22
+
+### Fixed
+- **Service worker was cache-first with a fixed cache name, so updates never reached
+  installed/live copies** — the app you saw could be an old build. Now network-first for HTML,
+  versioned cache, and old caches are purged on activation.
+- Tooltip keynote is more prominent (divider + brighter text); it is now a proper short remedy card.
+
+### Added
+- Version stamp (footer + About) and **Tools → Check for updates** (unregisters the service
+  worker, clears caches, reloads).
+
 ## [1.2.0] — 2026-10-22
 
 ### Added
