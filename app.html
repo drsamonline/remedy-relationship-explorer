@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0b131d">
-<link rel="manifest" href="manifest.webmanifest?v=1.6.1">
+<link rel="manifest" href="manifest.webmanifest?v=1.6.2">
 <link rel="icon" href="assets/icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Remedy Relationship Explorer — Boericke (1927)</title>
@@ -383,7 +383,7 @@ const degree = {}; nodes.forEach(n=>degree[n.id]=adj.get(n.id).length);
 const kcount = {}; nodes.forEach(n=>{ const k=n.kingdom||'unclassified'; kcount[k]=(kcount[k]||0)+1; });
 
 /* full-text index over keynotes */
-const APP_VERSION = '1.6.1';
+const APP_VERSION = '1.6.2';
 const FT = nodes.map(n=>({id:n.id, text:((n.id+' '+(n.common||'')+' '+(n.keynote||''))).toLowerCase()}));
 
 /* ---------- storage ---------- */
@@ -593,7 +593,7 @@ let worker=null, workerReady=false;
       + "self.alpha*=0.98;postMessage({alpha:self.alpha,pos:N.map(function(n){return [n.x,n.y];})});"
       + "if(self.alpha>0.006&&self.run)setTimeout(tick,16);}";
     worker=new Worker(URL.createObjectURL(new Blob([wsrc],{type:'text/javascript'})));
-    worker.onmessage=function(e){ const d=e.data; if(!sim||!sim.worker) return;
+    worker.onmessage=function(e){ const d=e.data; if(!sim||!sim.worker||mode!=='network') return;
       const ns=sim.nodes; for(let i=0;i<ns.length&&i<d.pos.length;i++){ ns[i].x=d.pos[i][0]; ns[i].y=d.pos[i][1]; }
       sim.alpha=d.alpha;
       placed=ns.map(n=>({node:n,x:n.x,y:n.y,r:n.r}));
@@ -602,7 +602,7 @@ let worker=null, workerReady=false;
     workerReady=true;
   }catch(e){ workerReady=false; }
 })();
-function stopWorker(){ if(workerReady&&worker&&sim&&sim.worker){ try{ worker.postMessage({cmd:'stop'}); }catch(e){} } }
+function stopWorker(){ if(workerReady&&worker&&sim&&sim.worker){ try{ worker.postMessage({cmd:'stop'}); }catch(e){} sim.worker=false; } }
 
 /* ---------- clustering & colour-by ---------- */
 const KCOL={mineral:'#8ab4f8',plant:'#4ade80',animal:'#fb923c',nosode:'#e879f9',unclassified:'#94a3b8'};
@@ -1027,7 +1027,8 @@ function setMode(m){ if(m!=='network') stopWorker();
   document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x.dataset.m===m));
   document.getElementById('degrow').style.display=(m==='network')?'flex':'none';
   document.getElementById('cap').style.display=(m==='focus')?'flex':'none';
-  if(m==='focus'){ if(!focusId&&selected) focusId=selected.id; layoutFocus(); } else buildNetwork();
+  if(m==='focus'){ if(!focusId&&selected) focusId=selected.id; layoutFocus();
+    requestAnimationFrame(()=>{ if(mode==='focus' && !placed.some(p=>p.center)){ layoutFocus(); dirty=true; } }); } else buildNetwork();
   renderCrumbs(); renderPanel(); updateBack(); savePrefs();
 }
 document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{ setMode(b.dataset.m); updateHash(); });
@@ -1655,7 +1656,7 @@ loop();
 </script>
 <script>
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
-  addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=1.6.1').catch(()=>{}));
+  addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=1.6.2').catch(()=>{}));
 }
 </script>
 </body>
