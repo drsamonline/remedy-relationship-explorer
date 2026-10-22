@@ -3,6 +3,20 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.4.1] — 2026-10-22
+
+### Added
+- **Automatic installer builds.** GitHub Actions now compiles and publishes real binaries to
+  [Releases](https://github.com/drsamonline/remedy-relationship-explorer/releases/latest):
+  Windows `.exe` + `.msi` (Tauri), macOS `.dmg`, Linux `.AppImage` + `.deb`, and Android `.apk`
+  (Capacitor). All built from the same single HTML file on every version tag.
+- **Download section** in the README and on the landing page.
+
+### Fixed
+- Android CI failed at SDK setup (`sdkmanager` could not find package `tools`); the workflow now
+  configures the SDK directly and installs `platforms;android-34` + `build-tools;34.0.0`.
+- Desktop CI now generates app icons from a committed PNG and bundles with per-platform defaults.
+
 ## [1.4.0] — 2026-10-22
 
 ### Fixed
