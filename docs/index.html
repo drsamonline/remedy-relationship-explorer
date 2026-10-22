@@ -3,435 +3,227 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Remedy Relationship Explorer — offline homeopathic remedy relationship graph</title>
-<meta name="description" content="An offline, single-file explorer for homeopathic remedy relationships — 686 remedies and 7,786 relationships drawn as an interactive, zoomable graph. Built from four public-domain materia medicas. No server, no backend.">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="author" content="Dr Sohil Momin">
-<meta name="theme-color" content="#0e0f12">
-<link rel="canonical" href="https://drsamonline.github.io/remedy-relationship-explorer/">
-<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
-
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Remedy Relationship Explorer">
+<title>Remedy Relationship Explorer — offline homeopathic remedy graph</title>
+<meta name="description" content="An offline, single-file explorer for homeopathic remedy relationships, built from public-domain materia medicas (Boericke 1927, Clarke 1900, Hering 1879).">
 <meta property="og:title" content="Remedy Relationship Explorer">
-<meta property="og:description" content="An offline, single-file explorer for homeopathic remedy relationships — 686 remedies, 7,786 relationships, drawn as an interactive graph.">
-<meta property="og:url" content="https://drsamonline.github.io/remedy-relationship-explorer/">
-<meta property="og:image" content="https://drsamonline.github.io/remedy-relationship-explorer/assets/network-1440.png">
-<meta property="og:image:alt" content="The network view: a force-directed graph of connected homeopathic remedies.">
-<meta property="og:locale" content="en_IN">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Remedy Relationship Explorer">
-<meta name="twitter:description" content="An offline, single-file explorer for homeopathic remedy relationships — 686 remedies, 7,786 relationships.">
-<meta name="twitter:image" content="https://drsamonline.github.io/remedy-relationship-explorer/assets/network-1440.png">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Remedy Relationship Explorer",
-  "applicationCategory": "EducationalApplication",
-  "applicationSubCategory": "Reference",
-  "operatingSystem": "Any (modern web browser)",
-  "url": "https://drsamonline.github.io/remedy-relationship-explorer/",
-  "description": "An offline, single-file explorer for homeopathic remedy relationships, built from four public-domain materia medicas (Boericke 1927, Clarke 1900, Hering 1879, Allen 1898).",
-  "author": {
-    "@type": "Person",
-    "name": "Dr Sohil Momin",
-    "email": "sohilmomin2000@gmail.com",
-    "url": "https://github.com/drsamonline"
-  },
-  "license": "https://github.com/drsamonline/remedy-relationship-explorer/blob/main/LICENSE",
-  "isAccessibleForFree": true,
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
-}
-</script>
-
+<meta property="og:description" content="Offline explorer for homeopathic remedy relationships.">
+<meta name="theme-color" content="#0b131d">
+<link rel="icon" href="assets/icon.svg">
+<link rel="manifest" href="manifest.webmanifest">
 <style>
-  :root{
-    --bg:#0e0f12; --bg2:#121318; --panel:#181a20; --panel2:#1f222b;
-    --ink:#f2efe9; --dim:#a5a49c; --dim2:#7d7c76;
-    --line:#2a2d36; --line2:#343843;
-    --copper:#e79b5c; --copper2:#f3b57e; --mint:#84d3bf; --violet:#b8a0ee;
-    --glow:rgba(231,155,92,.28);
-    --max:1120px;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
-  }
+  :root{--bg:#0b131d;--panel:#111a2b;--panel2:#17233a;--ink:#e9eef6;--dim:#93a3b8;--line:#223046;
+    --accent:#6ea8fe;--green:#34d399;--amber:#fbbf24;--purple:#c084fc}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  html,body{overflow-x:hidden}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.62 var(--sans);
-    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  a{color:var(--copper2);text-decoration:none}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
   a:hover{text-decoration:underline}
-  img{max-width:100%;height:auto;display:block}
-  .wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 22px}
-  .eyebrow{font:600 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--copper)}
-
-  /* nav */
-  header.nav{position:sticky;top:0;z-index:20;background:rgba(14,15,18,.82);
-    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-  .nav .wrap{display:flex;align-items:center;gap:16px;height:62px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:650;color:var(--ink);letter-spacing:-.01em}
-  .brand:hover{text-decoration:none}
-  .brand .mark{width:28px;height:28px;flex:none;color:var(--copper)}
-  .nav .links{margin-left:auto;display:flex;gap:22px;font-size:14.5px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  header.nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);
+    background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:18px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:650}
+  .brand img{width:26px;height:26px}
+  .nav .links{margin-left:auto;display:flex;gap:20px;font-size:14.5px}
   .nav .links a{color:var(--dim)}
   .nav .links a:hover{color:var(--ink);text-decoration:none}
-  .nav .cta-mini{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border-radius:9px;
-    background:linear-gradient(135deg,var(--copper),var(--copper2));color:#1a1108;font-weight:650;font-size:13.5px}
-  .nav .cta-mini:hover{text-decoration:none;filter:brightness(1.06)}
-  @media(max-width:820px){.nav .links{display:none}}
-
-  /* hero */
-  .hero{position:relative;padding:78px 0 66px;overflow:hidden;
-    background:radial-gradient(1000px 520px at 50% -10%,rgba(231,155,92,.16),transparent 68%)}
-  .hero .bg-net{position:absolute;inset:0;width:100%;height:100%;opacity:.5;pointer-events:none}
-  .hero .wrap{position:relative}
-  .hero .logo{width:66px;height:66px;margin-bottom:20px;color:var(--copper)}
-  .hero h1{font-size:clamp(30px,5.4vw,54px);line-height:1.08;margin:0 0 16px;letter-spacing:-.025em;font-weight:720}
-  .hero h1 .g{background:linear-gradient(120deg,var(--copper2),var(--mint));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero p.lead{font-size:clamp(16px,2.1vw,19.5px);color:var(--dim);max-width:680px;margin:0 0 30px}
-  .chips{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 30px}
-  .chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--panel);
-    border-radius:999px;padding:7px 14px;font-size:13px;color:var(--dim)}
-  .chip b{color:var(--ink);font-weight:650}
-  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);flex:none}
-  .cta{display:flex;flex-wrap:wrap;gap:12px}
-  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:12px;font-weight:650;
-    font-size:15.5px;border:1px solid var(--line2);background:var(--panel2);color:var(--ink);transition:.15s}
-  .btn:hover{text-decoration:none;background:#262a34}
-  .btn.primary{background:linear-gradient(135deg,var(--copper),var(--copper2));border-color:transparent;color:#1a1108;
-    box-shadow:0 10px 30px var(--glow)}
+  @media(max-width:760px){.nav .links{display:none}}
+  .hero{padding:74px 0 54px;text-align:center;
+    background:radial-gradient(900px 460px at 50% 0%, rgba(40,64,90,.5), rgba(11,19,29,0) 70%)}
+  .hero img.logo{width:76px;height:76px;margin-bottom:16px}
+  .hero h1{font-size:clamp(28px,5vw,46px);line-height:1.15;margin:0 0 14px;letter-spacing:-.02em}
+  .hero p.lead{font-size:clamp(16px,2.2vw,19px);color:var(--dim);max-width:660px;margin:0 auto 26px}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px}
+  .badges img{height:20px}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:12px;
+    font-weight:600;font-size:15px;border:1px solid var(--line);background:var(--panel2);color:var(--ink)}
+  .btn:hover{background:#1e2d45;text-decoration:none}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),var(--green));border:0;color:#08131f}
   .btn.primary:hover{filter:brightness(1.06)}
-  .btn svg{width:18px;height:18px;flex:none}
-
-  section{padding:64px 0;border-top:1px solid var(--line)}
-  h2{font-size:clamp(23px,3.1vw,32px);margin:0 0 10px;letter-spacing:-.02em;font-weight:700}
-  .sub{color:var(--dim);margin:0 0 34px;max-width:760px;font-size:16.5px}
-
-  /* screens */
-  .shot{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;
-    box-shadow:0 30px 80px rgba(0,0,0,.5)}
-  .shot img{width:100%}
-  .shot + .shot{margin-top:26px}
-  .cap{color:var(--dim);font-size:14px;padding:13px 18px;border-top:1px solid var(--line);background:var(--bg2)}
-  .cap b{color:var(--ink)}
-  .phones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:26px;justify-items:center}
-  .phone{width:100%;max-width:300px;border:1px solid var(--line2);border-radius:30px;padding:10px;background:var(--bg2);
-    box-shadow:0 22px 60px rgba(0,0,0,.5)}
-  .phone img{border-radius:21px}
-  .phone .pcap{text-align:center;color:var(--dim);font-size:12.5px;padding:10px 6px 4px}
-  @media(max-width:560px){.phones{grid-template-columns:minmax(0,1fr)}}
-
-  /* feature grid */
-  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:22px;transition:.15s}
-  .card:hover{border-color:var(--line2);transform:translateY(-2px)}
-  .card .ic{width:34px;height:34px;color:var(--copper);margin-bottom:14px}
-  .card h3{margin:0 0 8px;font-size:16.5px;letter-spacing:-.01em}
-  .card p{margin:0;color:var(--dim);font-size:14.6px}
-
-  /* data table */
-  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
-  table{width:100%;border-collapse:collapse;font-size:14.6px;min-width:520px}
-  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line)}
-  tr:last-child td{border-bottom:0}
-  th{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.08em;background:var(--bg2)}
-  td b{color:var(--ink)}
-  .prov{font:600 11px/1 var(--mono);color:var(--copper);border:1px solid var(--line2);border-radius:5px;padding:2px 6px}
-
-  /* steps */
-  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:14px}
-  ol.steps li{counter-increment:s;position:relative;padding:18px 20px 18px 60px;background:var(--panel);
-    border:1px solid var(--line);border-radius:14px;color:var(--dim);font-size:14.8px}
-  ol.steps li::before{content:counter(s);position:absolute;left:18px;top:18px;width:28px;height:28px;border-radius:50%;
-    display:grid;place-items:center;font:650 13px/1 var(--mono);color:#1a1108;
-    background:linear-gradient(135deg,var(--copper),var(--copper2))}
-  ol.steps li b{color:var(--ink)}
-
-  /* demo band */
-  .band{background:linear-gradient(135deg,rgba(231,155,92,.12),rgba(132,211,191,.08));
-    border:1px solid var(--line2);border-radius:20px;padding:40px 34px;text-align:center}
-  .band h2{margin-bottom:12px}
-  .band p{color:var(--dim);max-width:620px;margin:0 auto 26px}
-  .band .cta{justify-content:center}
-  .dl{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:18px}
-  .dl .btn{font-size:14.5px;padding:12px 20px}
-
-  /* note */
-  .note{display:flex;gap:16px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);
-    border-left:3px solid var(--copper);border-radius:12px;padding:20px 22px}
-  .note svg{width:26px;height:26px;color:var(--copper);flex:none;margin-top:2px}
-  .note p{margin:0;color:var(--dim);font-size:14.8px}
-  .note b{color:var(--ink)}
-
-  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--dim);font-size:14px;background:var(--bg2)}
-  footer .wrap{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
-  footer a{color:var(--dim)}
-  footer a:hover{color:var(--ink)}
-  footer .sep{margin-left:auto}
-  .pill{display:inline-block;border:1px solid var(--line2);border-radius:20px;padding:4px 12px;font-size:12.5px;color:var(--dim)}
+  section{padding:56px 0;border-top:1px solid var(--line)}
+  h2{font-size:clamp(22px,3vw,30px);margin:0 0 8px;letter-spacing:-.01em}
+  .sub{color:var(--dim);margin:0 0 30px;max-width:720px}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{margin:0 0 7px;font-size:16px}
+  .card p{margin:0;color:var(--dim);font-size:14.5px}
+  .card .ic{font-size:20px;margin-bottom:9px;display:block}
+  .shot{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel);
+    box-shadow:0 30px 70px rgba(0,0,0,.45)}
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:26px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px}
+  .stat b{display:block;font-size:26px;font-weight:680}
+  .stat span{color:var(--dim);font-size:13px}
+  ul.lic{color:var(--dim);font-size:14.8px}
+  ul.lic b{color:var(--ink)}
+  footer{border-top:1px solid var(--line);padding:30px 0;color:var(--dim);font-size:14px}
+  footer .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:12.5px;color:var(--dim)}
 </style>
 </head>
 <body>
+<header class="nav"><div class="wrap">
+  <div class="brand"><img src="assets/icon.svg" alt=""> Remedy Relationship Explorer</div>
+  <nav class="links">
+    <a href="app.html">App</a><a href="#download">Download</a><a href="#features">Features</a><a href="#data">Data</a>
+    <a href="#offline">Offline</a><a href="#licence">Licence</a>
+    <a href="https://github.com/drsamonline/remedy-relationship-explorer">GitHub</a>
+  </nav>
+</div></header>
 
-<header class="nav">
-  <div class="wrap">
-    <a class="brand" href="./">
-      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <circle cx="16" cy="16" r="4.4" fill="currentColor"/>
-        <circle cx="16" cy="4.5" r="2.6" fill="currentColor" opacity=".85"/>
-        <circle cx="27" cy="22" r="2.6" fill="currentColor" opacity=".85"/>
-        <circle cx="5" cy="22" r="2.6" fill="currentColor" opacity=".85"/>
-        <g stroke="currentColor" stroke-width="1.4" opacity=".7">
-          <line x1="16" y1="16" x2="16" y2="4.5"/>
-          <line x1="16" y1="16" x2="27" y2="22"/>
-          <line x1="16" y1="16" x2="5" y2="22"/>
+<div class="hero"><div class="wrap">
+  <img class="logo" src="assets/icon.svg" alt="">
+  <h1>Homeopathic remedy relationships,<br>offline and on one page.</h1>
+  <p class="lead">An interactive graph of complementary, antidotal, inimical and “compare” links —
+    built from four public-domain materia medicas. No server, no account, no network.</p>
+  <div class="badges">
+    <img src="https://img.shields.io/badge/686-remedies-blue.svg" alt="685 remedies">
+    <img src="https://img.shields.io/badge/7%2C786-relationships-informational.svg" alt="7,366 relationships">
+    <img src="https://img.shields.io/badge/4-public--domain%20sources-orange.svg" alt="3 sources">
+    <img src="https://img.shields.io/badge/works-100%25%20offline-success.svg" alt="offline">
+    <img src="https://img.shields.io/badge/backend-none-lightgrey.svg" alt="no backend">
+  </div>
+  <div class="cta">
+    <a class="btn primary" href="app.html">▶ Open the app</a>
+    <a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer/releases/latest">⬇ Download (.exe / .apk / .dmg)</a>
+    <a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer">★ GitHub</a>
+  </div>
+</div></div>
+
+<section><div class="wrap">
+  <div class="shot">
+    <svg viewBox="0 0 1000 520" width="100%" role="img" aria-label="Preview of the app">
+      <rect width="1000" height="520" fill="#0d1620"/>
+      <rect x="0" y="0" width="1000" height="52" fill="#0f1a26"/>
+      <circle cx="30" cy="26" r="11" fill="#6ea8fe"/><text x="52" y="31" fill="#e9eef6" font-family="sans-serif" font-size="14">Remedy Relationship Explorer</text>
+      <g font-family="sans-serif" font-size="11.5" fill="#c7d6e6" text-anchor="middle">
+        <g stroke="#34d399" stroke-width="1.4" opacity=".8">
+          <line x1="500" y1="290" x2="500" y2="120"/><line x1="500" y1="290" x2="690" y2="200"/>
+          <line x1="500" y1="290" x2="650" y2="400"/><line x1="500" y1="290" x2="350" y2="400"/>
+          <line x1="500" y1="290" x2="310" y2="200"/>
         </g>
-      </svg>
-      Remedy Relationship Explorer
-    </a>
-    <nav class="links">
-      <a href="#screens">Screens</a>
-      <a href="#features">Features</a>
-      <a href="#data">Data</a>
-      <a href="#how">How it works</a>
-      <a href="https://github.com/drsamonline/remedy-relationship-explorer">GitHub</a>
-    </nav>
-    <a class="cta-mini" href="./play/">Open the live demo</a>
-  </div>
-</header>
-
-<div class="hero">
-  <svg class="bg-net" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <g stroke="#e79b5c" stroke-width="1" opacity=".22" fill="none">
-      <line x1="120" y1="120" x2="360" y2="70"/><line x1="360" y1="70" x2="640" y2="150"/>
-      <line x1="640" y1="150" x2="900" y2="80"/><line x1="900" y1="80" x2="1090" y2="180"/>
-      <line x1="120" y1="120" x2="230" y2="330"/><line x1="230" y1="330" x2="520" y2="410"/>
-      <line x1="520" y1="410" x2="820" y2="360"/><line x1="820" y1="360" x2="1090" y2="180"/>
-      <line x1="360" y1="70" x2="520" y2="410"/><line x1="640" y1="150" x2="820" y2="360"/>
-      <line x1="900" y1="80" x2="820" y2="360"/><line x1="230" y1="330" x2="640" y2="150"/>
-    </g>
-    <g fill="#84d3bf" opacity=".5">
-      <circle cx="120" cy="120" r="4"/><circle cx="360" cy="70" r="5"/><circle cx="640" cy="150" r="6"/>
-      <circle cx="900" cy="80" r="4"/><circle cx="1090" cy="180" r="5"/><circle cx="230" cy="330" r="5"/>
-      <circle cx="520" cy="410" r="4"/><circle cx="820" cy="360" r="6"/>
-    </g>
-  </svg>
-  <div class="wrap">
-    <svg class="logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <circle cx="16" cy="16" r="4.6" fill="currentColor"/>
-      <circle cx="16" cy="4" r="2.8" fill="currentColor" opacity=".85"/>
-      <circle cx="27.4" cy="22.4" r="2.8" fill="currentColor" opacity=".85"/>
-      <circle cx="4.6" cy="22.4" r="2.8" fill="currentColor" opacity=".85"/>
-      <circle cx="27.4" cy="9.6" r="2" fill="currentColor" opacity=".6"/>
-      <circle cx="4.6" cy="9.6" r="2" fill="currentColor" opacity=".6"/>
-      <g stroke="currentColor" stroke-width="1.4" opacity=".7">
-        <line x1="16" y1="16" x2="16" y2="4"/><line x1="16" y1="16" x2="27.4" y2="22.4"/>
-        <line x1="16" y1="16" x2="4.6" y2="22.4"/><line x1="16" y1="16" x2="27.4" y2="9.6"/>
-        <line x1="16" y1="16" x2="4.6" y2="9.6"/>
+        <g stroke="#60a5fa" stroke-width="1" opacity=".55">
+          <line x1="500" y1="290" x2="600" y2="110"/><line x1="500" y1="290" x2="760" y2="300"/>
+          <line x1="500" y1="290" x2="580" y2="450"/><line x1="500" y1="290" x2="250" y2="320"/>
+        </g>
+        <g stroke="#f87171" stroke-width="1" opacity=".6"><line x1="500" y1="290" x2="400" y2="120"/><line x1="500" y1="290" x2="700" y2="450"/></g>
+        <circle cx="500" cy="290" r="20" fill="#dbe8f4"/><text x="500" y="294" fill="#0d1620" font-size="11" font-weight="700">Sepia</text>
+        <circle cx="500" cy="120" r="8" fill="#7f9dc0"/><text x="500" y="103">Lachesis</text>
+        <circle cx="690" cy="200" r="8" fill="#7f9dc0"/><text x="690" y="183">Sulphur</text>
+        <circle cx="650" cy="400" r="8" fill="#7f9dc0"/><text x="650" y="420">Pulsatilla</text>
+        <circle cx="350" cy="400" r="8" fill="#7f9dc0"/><text x="350" y="420">Silicea</text>
+        <circle cx="310" cy="200" r="8" fill="#7f9dc0"/><text x="310" y="183">Natrum mur.</text>
+        <circle cx="600" cy="110" r="6" fill="#587591"/><text x="600" y="96">Lycopodium</text>
+        <circle cx="760" cy="300" r="6" fill="#587591"/><text x="760" y="316">Graphites</text>
+        <circle cx="580" cy="450" r="6" fill="#587591"/><text x="580" y="470">Thuja</text>
+        <circle cx="400" cy="120" r="6" fill="#587591"/><text x="400" y="106">Coffea</text>
+        <circle cx="250" cy="320" r="6" fill="#587591"/><text x="250" y="338">Kreosotum</text>
       </g>
+      <rect x="830" y="70" width="150" height="410" rx="10" fill="#101c28" stroke="#1e2c3a"/>
+      <text x="848" y="98" fill="#e9eef6" font-family="sans-serif" font-size="13" font-weight="700">Sepia</text>
+      <text x="848" y="118" fill="#93a3b8" font-family="sans-serif" font-size="11">183 related remedies</text>
+      <rect x="848" y="132" width="116" height="52" rx="8" fill="#17233a"/>
+      <text x="856" y="150" fill="#93a3b8" font-family="sans-serif" font-size="8.5">KEYNOTES · BOERICKE 1927</text>
+      <text x="856" y="166" fill="#c7d6e6" font-family="sans-serif" font-size="9">Acts on the portal system…</text>
     </svg>
-    <p class="eyebrow">Homeopathic materia medica &middot; graph explorer</p>
-    <h1>Remedy Relationship Explorer</h1>
-    <p class="lead">An offline, single-file explorer for homeopathic remedy relationships &mdash; complementary,
-      antidotal, inimical and &ldquo;compare&rdquo; links drawn as an interactive, zoomable graph.</p>
-    <div class="chips">
-      <span class="chip"><span class="dot"></span><b>686</b> remedies</span>
-      <span class="chip"><span class="dot"></span><b>7,786</b> relationships</span>
-      <span class="chip"><span class="dot"></span><b>4</b> public-domain books</span>
-      <span class="chip"><span class="dot"></span>works <b>fully offline</b></span>
-      <span class="chip"><span class="dot"></span><b>no backend</b></span>
-    </div>
-    <div class="cta">
-      <a class="btn primary" href="./play/">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        Open the live demo
-      </a>
-      <a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.3-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
-        View on GitHub
-      </a>
-    </div>
   </div>
-</div>
+</div></section>
 
-<section id="screens">
-  <div class="wrap">
-    <p class="eyebrow">Screenshots</p>
-    <h2>Two ways to read the graph</h2>
-    <p class="sub">Real captures of the running app, taken in a headless browser &mdash; not mockups.</p>
-
-    <figure class="shot" style="margin:0">
-      <img src="assets/network-1440.png" width="1440" height="900" alt="Network view: a force-directed graph of the most-connected homeopathic remedies, each node labelled, with a detail slider and filter panel.">
-      <figcaption class="cap"><b>Network view</b> &mdash; the most-connected remedies as a force-directed graph, with a detail slider and collision-aware layout so nodes never overlap.</figcaption>
-    </figure>
-
-    <figure class="shot" style="margin:0">
-      <img src="assets/focus-1440.png" width="1440" height="900" alt="Focus view: the remedy Sepia centred, its related remedies arranged in a ring and colour-coded by relationship type.">
-      <figcaption class="cap"><b>Focus view</b> &mdash; one remedy at a time, its relationships arranged in a ring, grouped and colour-coded by type. Here Sepia sits at the centre of 178 related remedies.</figcaption>
-    </figure>
-
-    <div class="phones">
-      <figure class="phone" style="margin:0">
-        <img src="assets/focus-390.png" width="390" height="844" alt="Focus view on a narrow phone-width screen.">
-        <figcaption class="pcap">Focus view &middot; 390&nbsp;px</figcaption>
-      </figure>
-      <figure class="phone" style="margin:0">
-        <img src="assets/network-390.png" width="390" height="844" alt="Network view on a narrow phone-width screen.">
-        <figcaption class="pcap">Network view &middot; 390&nbsp;px</figcaption>
-      </figure>
-    </div>
+<section id="download"><div class="wrap">
+  <h2>Download</h2>
+  <p class="sub">Every build runs entirely on your device. Same app, different wrappers.</p>
+  <div class="grid">
+    <div class="card"><h3>🪟 Windows</h3><p>.exe installer and .msi</p>
+      <p style="margin-top:10px"><a class="btn primary" href="https://github.com/drsamonline/remedy-relationship-explorer/releases/latest">Download for Windows</a></p></div>
+    <div class="card"><h3>🤖 Android</h3><p>remedy-explorer.apk</p>
+      <p style="margin-top:10px"><a class="btn primary" href="https://github.com/drsamonline/remedy-relationship-explorer/releases/latest">Download APK</a></p></div>
+    <div class="card"><h3>🍎 macOS</h3><p>.dmg</p>
+      <p style="margin-top:10px"><a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer/releases/latest">Download .dmg</a></p></div>
+    <div class="card"><h3>🐧 Linux</h3><p>.AppImage and .deb</p>
+      <p style="margin-top:10px"><a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer/releases/latest">Download for Linux</a></p></div>
+    <div class="card"><h3>🌐 Any device</h3><p>The single-file app — open it and go, online or off.</p>
+      <p style="margin-top:10px"><a class="btn" href="app.html">Open the app</a></p></div>
+    <div class="card"><h3>📲 Install as an app</h3><p>Open the demo in Chrome/Edge and choose <b>Install app</b>.</p>
+      <p style="margin-top:10px"><a class="btn" href="app.html">Install PWA</a></p></div>
   </div>
-</section>
+  <p class="sub" style="margin-top:18px">Installers are attached to the latest release by GitHub Actions. If a file is missing, that platform's build may still be running — see <a href="https://github.com/drsamonline/remedy-relationship-explorer/actions">Actions</a>.</p>
+</div></section>
 
-<section id="features">
-  <div class="wrap">
-    <p class="eyebrow">Features</p>
-    <h2>What the app gives you</h2>
-    <p class="sub">Everything below is stated in the project README. Nothing is bolted on, and nothing needs a server.</p>
-    <div class="grid">
-      <div class="card">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="3.4" r="1.9"/><circle cx="20.4" cy="17" r="1.9"/><circle cx="3.6" cy="17" r="1.9"/><path d="M12 5.3v3.5M14.7 13.9l3.9 2.2M9.3 13.9l-3.9 2.2"/></svg>
-        <h3>Focus view</h3>
-        <p>One remedy at a time, its relationships arranged in a ring, grouped and colour-coded by type. Click any remedy to re-centre; breadcrumbs retrace your path.</p>
-      </div>
-      <div class="card">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="8" r="2"/><circle cx="9" cy="18" r="2"/><circle cx="17" cy="17" r="1.6"/><path d="M6.6 7.3l10.8.8M6.4 7.8l1.9 8.4M18 9.8l-1 5.4M10.8 18.2l4.6-1"/></svg>
-        <h3>Network view</h3>
-        <p>The most-connected remedies as a force-directed graph, with a detail slider and collision-aware layout so nodes never overlap.</p>
-      </div>
-      <div class="card">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
-        <h3>686 remedies</h3>
-        <p>A vocabulary of 686 remedies, each with its relationships resolved against abbreviations, synonyms and full names.</p>
-      </div>
-      <div class="card">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="18" r="2.2"/><path d="M8.2 6h7.6M6 8.2v7.6M18 8.2v7.6M8.2 18h7.6"/></svg>
-        <h3>7,786 relationships</h3>
-        <p>Complementary, antidotal, inimical, &ldquo;follows well&rdquo; and &ldquo;compare&rdquo; links, merged across every source and cross-referenced.</p>
-      </div>
-      <div class="card">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5V20.5M19 18v3H6.5"/></svg>
-        <h3>4 public-domain sources</h3>
-        <p>Relationships parsed from four public-domain materia medicas, each relationship carrying the source that asserts it.</p>
-      </div>
-      <div class="card">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
-        <h3>One self-contained HTML file</h3>
-        <p>The whole app &mdash; code and data &mdash; is a single HTML document. No build step, no API keys, no dependencies to install.</p>
-      </div>
-      <div class="card">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5.5 5.5 0 0 1 7 0"/><path d="M12 19.5h.01"/><path d="M2 9a15 15 0 0 1 20 0"/></svg>
-        <h3>Works fully offline</h3>
-        <p>No server, no backend, no network access. Open the file and it works &mdash; on a laptop, a tablet or a phone, online or off.</p>
-      </div>
-      <div class="card">
-        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>
-        <h3>No backend</h3>
-        <p>Nothing to host, nothing to authenticate. Search, layout and storage all run in the browser; your notes stay on your device.</p>
-      </div>
-    </div>
+<section id="features"><div class="wrap">
+  <h2>Built for study and reference</h2>
+  <p class="sub">Everything a practitioner or student needs to trace how remedies relate — and nothing that needs a server.</p>
+  <div class="grid">
+    <div class="card"><span class="ic">◎</span><h3>Focus view</h3><p>One remedy at a time, its relationships on a ring, grouped and coloured by type. Click to re-centre; breadcrumbs retrace your path.</p></div>
+    <div class="card"><span class="ic">✳</span><h3>Network view</h3><p>The most-connected remedies as a force graph, with a detail slider and collision-aware layout so nothing overlaps.</p></div>
+    <div class="card"><span class="ic">🔍</span><h3>Search by symptom</h3><p>Full-text search scans keynotes too — “burning itching worse heat” finds Sulphur, Oenanthe, Selenium and more.</p></div>
+    <div class="card"><span class="ic">⇄</span><h3>Compare &amp; paths</h3><p>Compare two remedies (shared / exclusive / overlap score), or find the shortest chain of relationships between any pair.</p></div>
+    <div class="card"><span class="ic">⚖</span><h3>Provenance</h3><p>Every relationship is tagged B / C / H by source, with a “corroborated only” filter for the links two or more books agree on.</p></div>
+    <div class="card"><span class="ic">🎓</span><h3>Study tools</h3><p>Full keynotes in a built-in reader, quiz mode, flashcards, a shortlist with private notes, Markdown notebook export, SVG/PNG export and a printable remedy sheet. A guided tutorial runs on first visit.</p></div>
   </div>
-</section>
+</div></section>
 
-<section id="data">
-  <div class="wrap">
-    <p class="eyebrow">Data sources</p>
-    <h2>Four public-domain books</h2>
-    <p class="sub">Relationships were parsed from each book&rsquo;s &ldquo;Relations&rdquo; sections, resolved against a
-      remedy-name vocabulary, merged across sources and cross-referenced. Every relationship is tagged with the
-      book that asserts it &mdash; <span class="prov">B</span> Boericke,
-      <span class="prov">C</span> Clarke, <span class="prov">H</span> Hering, <span class="prov">A</span> Allen.</p>
-    <div class="tablewrap">
-      <table>
-        <thead>
-          <tr><th>Source</th><th>Author</th><th>Year</th><th>Licence</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><b>Pocket Manual of Homoeopathic Materia Medica</b></td><td>William Boericke</td><td>1927</td><td>Public domain</td></tr>
-          <tr><td><b>Dictionary of Practical Materia Medica</b></td><td>John Henry Clarke</td><td>1900</td><td>Public domain</td></tr>
-          <tr><td><b>Guiding Symptoms of Our Materia Medica</b></td><td>Constantine Hering</td><td>1879</td><td>Public domain</td></tr>
-          <tr><td><b>Keynotes and Characteristics with Comparisons</b></td><td>Henry C. Allen</td><td>1898</td><td>Public domain</td></tr>
-        </tbody>
-      </table>
-    </div>
+<section id="data"><div class="wrap">
+  <h2>The data</h2>
+  <p class="sub">Parsed from the “Relations” sections of three public-domain works, merged and cross-referenced.</p>
+  <div class="stats">
+    <div class="stat"><b>686</b><span>remedies</span></div>
+    <div class="stat"><b>7,786</b><span>relationships</span></div>
+    <div class="stat"><b>928</b><span>corroborated by ≥2 books</span></div>
+    <div class="stat"><b>653</b><span>keynotes</span></div>
   </div>
-</section>
+  <table>
+    <tr><th>Source</th><th>Author</th><th>Year</th><th>Licence</th></tr>
+    <tr><td>Pocket Manual of Homoeopathic Materia Medica</td><td>William Boericke</td><td>1927</td><td>Public domain</td></tr>
+    <tr><td>Dictionary of Practical Materia Medica</td><td>John Henry Clarke</td><td>1900</td><td>Public domain</td></tr>
+    <tr><td>Guiding Symptoms of Our Materia Medica</td><td>Constantine Hering</td><td>1879</td><td>Public domain</td></tr>
+    <tr><td>Keynotes and Characteristics with Comparisons</td><td>Henry C. Allen</td><td>1898</td><td>Public domain</td></tr>
+  </table>
+  <p class="sub" style="margin-top:18px">⚠ OCR-derived from historical texts — may contain errors. For study and reference only; <b>not medical advice</b>. Always verify against the printed sources.</p>
+</div></section>
 
-<section id="how">
-  <div class="wrap">
-    <p class="eyebrow">How it works</p>
-    <h2>From printed page to graph</h2>
-    <p class="sub">A short, offline pipeline &mdash; the same one described in the project&rsquo;s data notes.</p>
-    <ol class="steps">
-      <li><b>Extract</b> each book&rsquo;s &ldquo;Relations&rdquo; sections from public-domain scans.</li>
-      <li><b>Normalise</b> the OCR &mdash; collapse whitespace, repair hyphenated line-breaks and common OCR confusions.</li>
-      <li><b>Resolve and canonicalise</b> each remedy token against a vocabulary of abbreviations, synonyms and full names.</li>
-      <li><b>Merge</b> the four sources into one edge list, recording a per-edge source list for provenance.</li>
-      <li><b>Draw</b> the result in the browser as a focus ring or a force-directed network &mdash; entirely on-device.</li>
-    </ol>
+<section id="offline"><div class="wrap">
+  <h2>Offline by design</h2>
+  <p class="sub">The application has no server, no backend and no network dependency — a design constraint, not a limitation.</p>
+  <div class="grid">
+    <div class="card"><h3>One file</h3><p>The whole app — code and data — is a single HTML document. Copy it to a USB stick and it still works.</p></div>
+    <div class="card"><h3>No tracking</h3><p>No analytics, no telemetry, no cookies, no accounts. Your notes stay in your browser's local storage.</p></div>
+    <div class="card"><h3>Installable</h3><p>Install it as a PWA, or use the Windows / Android builds. All three run entirely on-device.</p></div>
   </div>
-</section>
+</div></section>
 
-<section>
-  <div class="wrap">
-    <div class="band">
-      <p class="eyebrow" style="text-align:center">Live demo</p>
-      <h2>Open it in your browser</h2>
-      <p>Runs entirely on your device. No sign-in, no upload, no network needed once it has loaded.</p>
-      <div class="cta">
-        <a class="btn primary" href="./play/">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          Open the live demo
-        </a>
-        <a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer">View the source</a>
-      </div>
-      <div class="dl">
-        <a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer/releases/latest/download/remedy-relationship-explorer-portable.exe">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
-          Download for Windows (.exe)
-        </a>
-        <a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer/releases/latest/download/remedy-relationship-explorer.apk">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
-          Download for Android (.apk)
-        </a>
-      </div>
-    </div>
+<section id="licence"><div class="wrap">
+  <h2>Licence</h2>
+  <p class="sub">Free for study. Commercial use needs a licence. Educational institutions get it free or discounted.</p>
+  <ul class="lic">
+    <li><b>Free use</b> — for personal study, teaching and reference.</li>
+    <li><b>Copyright</b> — the application code is © 2026 Dr Sohil Momin. The book texts are public domain.</li>
+    <li><b>Derivative works</b> — permitted for non-commercial use with attribution and a link back.</li>
+    <li><b>Commercial use</b> — requires a paid licence.</li>
+    <li><b>Educational institutions</b> — free or discounted licences on request.</li>
+  </ul>
+  <p class="sub">Licensing enquiries: <a href="mailto:sohilmomin2000@gmail.com?subject=Remedy%20Explorer%20licence">sohilmomin2000@gmail.com</a></p>
+</div></section>
+
+<section id="author"><div class="wrap">
+  <h2>Author</h2>
+  <p class="sub"><b>Dr Sohil Momin</b> — homeopath · Vadodara, Gujarat, India<br>
+  <a href="mailto:sohilmomin2000@gmail.com">sohilmomin2000@gmail.com</a> · <a href="https://github.com/drsamonline">@drsamonline</a></p>
+  <div class="cta" style="justify-content:flex-start">
+    <a class="btn primary" href="app.html">▶ Open the app</a>
+    <a class="btn" href="https://github.com/drsamonline/remedy-relationship-explorer">★ Star on GitHub</a>
   </div>
-</section>
+</div></section>
 
-<section>
-  <div class="wrap">
-    <div class="note">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3 2.5 20h19z"/><path d="M12 9v5M12 17h.01"/></svg>
-      <p><b>A study and reference tool &mdash; not a diagnostic device.</b> The dataset is OCR-derived from historical
-        texts and may contain errors. It is not medical advice and must not be used to diagnose, treat or prescribe.
-        Always verify against the printed sources and consult a qualified practitioner.</p>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <span class="pill">686 remedies</span>
-    <span class="pill">7,786 relationships</span>
-    <span class="pill">4 public-domain books</span>
-    <span class="pill">offline &middot; no backend</span>
-    <span class="sep">
-      &copy; <span id="yr">2026</span> Dr Sohil Momin &middot;
-      <a href="https://github.com/drsamonline/remedy-relationship-explorer/blob/main/LICENSE">Licence</a> &middot;
-      <a href="https://github.com/drsamonline/remedy-relationship-explorer">GitHub</a> &middot;
-      <a href="./play/">Live demo</a>
-    </span>
-  </div>
-</footer>
-
-<script>
-  var y = document.getElementById('yr');
-  if (y) y.textContent = new Date().getFullYear();
-</script>
+<footer><div class="wrap">
+  <span class="pill">685 remedies</span><span class="pill">7,366 relationships</span><span class="pill">4 public-domain sources</span>
+  <span style="margin-left:auto">© 2026 Dr Sohil Momin · <a href="LICENSE">Licence</a> · <a href="https://github.com/drsamonline/remedy-relationship-explorer">GitHub</a></span>
+</div></footer>
+<script>if('serviceWorker' in navigator && location.protocol.startsWith('http')){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}</script>
 </body>
 </html>
