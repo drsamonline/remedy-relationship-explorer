@@ -1,6 +1,6 @@
 # Enhancement backlog
 
-## Done (v1.1.0)
+## Done (v1.1.0 – v1.2.0)
 - Rich tooltip with a short remedy detail box (keynote snippet, related count, source badges).
 - System-aware theme, high-contrast theme, adjustable text size.
 - Recent searches; light stemming in search.
@@ -11,13 +11,15 @@
 - Export / import all personal data as JSON.
 - First-run onboarding tour.
 - Web Worker for the force layout.
+- **Fourth source added: Allen's Keynotes with Comparisons** (+584 relationships, corroboration 807→928).
+- Visible dark-mode toggle.
 
 ## Still open (all offline)
 
 Every idea here runs entirely on-device: no server, no backend, no network call at runtime.
 
 ## Data
-- Add more public-domain sources (Allen, Farrington, Hughes, Boenninghausen, Kent's appendix).
+- Add further public-domain sources (Farrington, Hughes, Boenninghausen, Kent's appendix).
 - Recover the remaining OCR-corrupt relationships via better scans or a review pass.
 - Keynotes for the ~30 remedies still without one.
 - Remedy families / botanical & mineral groups as an extra relationship dimension.
