@@ -10,9 +10,9 @@
 [![Made with](https://img.shields.io/badge/made%20with-vanilla%20JS-yellow.svg)](app.html)
 [![Offline](https://img.shields.io/badge/works-100%25%20offline-success.svg)](
 [![No backend](https://img.shields.io/badge/backend-none-lightgrey.svg)](
-[![Remedies](https://img.shields.io/badge/remedies-685-informational.svg)](
-[![Relationships](https://img.shields.io/badge/relationships-7%2C366-informational.svg)](
-[![Sources](https://img.shields.io/badge/sources-3%20public--domain%20books-orange.svg)](
+[![Remedies](https://img.shields.io/badge/remedies-686-informational.svg)](
+[![Relationships](https://img.shields.io/badge/relationships-7%2C786-informational.svg)](
+[![Sources](https://img.shields.io/badge/sources-4%20public--domain%20books-orange.svg)](
 [![Live demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://drsamonline.github.io/remedy-relationship-explorer/app.html)
 
 [**▶ Open the live demo**](https://drsamonline.github.io/remedy-relationship-explorer/app.html) &nbsp;·&nbsp;
@@ -26,7 +26,7 @@
 ## What it is
 
 A study & reference tool for homeopathic **remedy relationships** — complementary, antidotal,
-inimical, "follows well" and "compare" links — extracted from three public-domain materia medicas
+inimical, "follows well" and "compare" links — extracted from four public-domain materia medicas
 and visualised as an interactive, zoomable graph.
 
 It is **one self-contained HTML file**. No server, no backend, no API keys, no build step, no
@@ -45,7 +45,7 @@ network access. Open it and it works — on a laptop, a tablet, or a phone, onli
   book, and a **“corroborated only”** toggle that keeps just the relationships confirmed by two
   or more books.
 - **Provenance** — every relationship carries a superscript showing its source: **B** Boericke,
-  **C** Clarke, **H** Hering.
+  **C** Clarke, **H** Hering, **A** Allen.
 - **Query expressions** — ask things like *“inimical to Lachesis and complementary to Sulphur”*.
 - **Compare two remedies** — shared vs exclusive relationships and a Jaccard overlap score.
 - **Colour by** relationship type, kingdom, community cluster or plant genus.
@@ -62,9 +62,9 @@ network access. Open it and it works — on a laptop, a tablet, or a phone, onli
 
 | | |
 |---|---|
-| Remedies | **685** |
-| Relationships | **7,366** |
-| Corroborated by ≥2 books | **807** |
+| Remedies | **686** |
+| Relationships | **7,786** |
+| Corroborated by ≥2 books | **928** |
 | Keynotes | **653** |
 | Kingdoms classified | 682 / 685 |
 
@@ -73,6 +73,7 @@ network access. Open it and it works — on a laptop, a tablet, or a phone, onli
 | Pocket Manual of Homoeopathic Materia Medica | William Boericke | 1927 | Public domain |
 | Dictionary of Practical Materia Medica | John Henry Clarke | 1900 | Public domain |
 | Guiding Symptoms of Our Materia Medica | Constantine Hering | 1879 | Public domain |
+| Keynotes and Characteristics with Comparisons | Henry C. Allen | 1898 | Public domain |
 
 Relationships were parsed from each book's **“Relations”** sections (OCR), resolved against a
 remedy-name vocabulary, merged across sources and cross-referenced. See
