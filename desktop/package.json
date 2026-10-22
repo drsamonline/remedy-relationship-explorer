@@ -1,0 +1,14 @@
+{
+  "name": "remedy-relationship-explorer-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Desktop wrapper for Remedy Relationship Explorer",
+  "scripts": {
+    "prep": "mkdir -p web && cp ../app.html web/index.html",
+    "tauri": "tauri",
+    "build": "npm run prep && tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}
