@@ -3,6 +3,21 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.1] — 2026-10-22
+
+### Fixed
+- **The hover/tap card was still truncated** (it cut the keynote at 300 characters). It now shows the
+  **complete** keynote, with the card scrollable and kept on screen. Confirmed: 1,100 characters
+  shown for Aconitum, no ellipsis, on both desktop and mobile.
+- **On touch devices the card vanished the instant it appeared** — the card's own `mouseleave`
+  fired spuriously after a tap. Guarded.
+- Tap an empty part of the graph to dismiss the card immediately.
+- Stripped OCR page-break running heads that had leaked into the middle of keynotes.
+
+### Verified
+- 6 viewports (320–2560 px): no overflow, no clipping, no errors.
+- 54 functional checks (desktop + mobile): all pass.
+
 ## [1.6.0] — 2026-10-22
 
 ### Fixed
