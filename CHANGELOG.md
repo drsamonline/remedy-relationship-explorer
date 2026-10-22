@@ -3,6 +3,28 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.4] — 2026-10-22
+
+### Fixed
+- **The page scrolled thousands of pixels on a phone, which is what made the tab strip look like it
+  was being overlapped by the graph.** The screen-reader relationship table (271 rows, ~6,600 px tall)
+  is an absolutely-positioned `.sr-only` element with no `top`/`left`, so it sat at its *static*
+  position far down the document and escaped `#app{overflow:hidden}` — its containing block was the
+  viewport, not the panel. The document grew to **5,495–6,529 px on a 568–844 px screen**. The
+  `.sr-only` rule now pins `top:0;left:0` and adds `contain:strict`, and `.profile .body` is
+  `position:relative` so the table can never escape the panel. The document is now exactly one
+  viewport tall at every size.
+- **The bottom of the side panel was clipped off-screen on phones.** The mobile rules sized the graph
+  and the panel against the *viewport* (`min-height:30vh` + `max-height:62vh` = 92vh) when only ~84vh
+  is available below the header. Both are now sized against `.main` as a percentage, so they always
+  fit — the panel ends exactly at the viewport bottom.
+
+### Verified
+- Document height now equals viewport height at 320×568, 351×784, 360×640, 390×844 and 1440×900.
+- The screen-reader table is still present (271 rows, captioned) — the accessibility fix did not cost
+  the accessibility feature.
+- No console errors; the canvas still paints; the tab strip is on top where it should be.
+
 ## [1.6.3] — 2026-10-22
 
 ### Fixed
