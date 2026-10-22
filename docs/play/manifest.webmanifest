@@ -2,13 +2,18 @@
   "name": "Remedy Relationship Explorer",
   "short_name": "Remedy Graph",
   "description": "Offline explorer for homeopathic remedy relationships, built from public-domain materia medicas.",
-  "start_url": "app.html",
+  "start_url": "index.html",
   "scope": ".",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#0b131d",
   "theme_color": "#0b131d",
   "icons": [
-    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }

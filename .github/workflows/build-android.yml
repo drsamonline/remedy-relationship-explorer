@@ -19,7 +19,7 @@ jobs:
         working-directory: mobile
         run: |
           npm install
-          mkdir -p www && cp ../app.html www/index.html
+          mkdir -p www && cp ../docs/play/index.html www/index.html
       - name: Add Android platform
         working-directory: mobile
         run: npx cap add android

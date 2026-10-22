@@ -1,3 +1,10 @@
+> **Remedy Relationship Explorer** — an offline, single-file explorer for homeopathic remedy relationships.
+> [**Landing page**](https://drsamonline.github.io/remedy-relationship-explorer/) &nbsp;·&nbsp;
+> [**Open the live demo**](https://drsamonline.github.io/remedy-relationship-explorer/play/) &nbsp;·&nbsp;
+> [**Releases**](https://github.com/drsamonline/remedy-relationship-explorer/releases)
+
+---
+
 <div align="center">
 
 <img src="assets/icon.svg" width="92" alt="Remedy Relationship Explorer">
@@ -7,15 +14,15 @@
 **An offline, single-file explorer for homeopathic remedy relationships — built from public-domain literature.**
 
 [![License](https://img.shields.io/badge/license-Custom%20(free%20use%20%C2%B7%20commercial%20requires%20licence)-blue.svg)](LICENSE)
-[![Made with](https://img.shields.io/badge/made%20with-vanilla%20JS-yellow.svg)](app.html)
-[![Offline](https://img.shields.io/badge/works-100%25%20offline-success.svg)](
-[![No backend](https://img.shields.io/badge/backend-none-lightgrey.svg)](
-[![Remedies](https://img.shields.io/badge/remedies-686-informational.svg)](
-[![Relationships](https://img.shields.io/badge/relationships-7%2C786-informational.svg)](
-[![Sources](https://img.shields.io/badge/sources-4%20public--domain%20books-orange.svg)](
-[![Live demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://drsamonline.github.io/remedy-relationship-explorer/app.html)
+[![Made with](https://img.shields.io/badge/made%20with-vanilla%20JS-yellow.svg)](docs/play/index.html)
+[![Offline](https://img.shields.io/badge/works-100%25%20offline-success.svg)](docs/offline.md)
+[![No backend](https://img.shields.io/badge/backend-none-lightgrey.svg)](docs/offline.md)
+[![Remedies](https://img.shields.io/badge/remedies-686-informational.svg)](docs/data.md)
+[![Relationships](https://img.shields.io/badge/relationships-7%2C786-informational.svg)](docs/data.md)
+[![Sources](https://img.shields.io/badge/sources-4%20public--domain%20books-orange.svg)](docs/data.md)
+[![Live demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://drsamonline.github.io/remedy-relationship-explorer/play/)
 
-[**▶ Open the live demo**](https://drsamonline.github.io/remedy-relationship-explorer/app.html) &nbsp;·&nbsp;
+[**▶ Open the live demo**](https://drsamonline.github.io/remedy-relationship-explorer/play/) &nbsp;·&nbsp;
 [Landing page](https://drsamonline.github.io/remedy-relationship-explorer/) &nbsp;·&nbsp;
 [Report an issue](https://github.com/drsamonline/remedy-relationship-explorer/issues)
 
@@ -57,7 +64,6 @@ network access. Open it and it works — on a laptop, a tablet, or a phone, onli
   a high-contrast theme, adjustable text size, and a **colour-blind-safe palette** with dashed edge patterns.
 - **Export/import all your data** (shortlist, notes, preferences) as a single JSON file.
 - **Fully responsive** — phone, tablet, and large desktop.
-- **In-app Help** (Tools → Help, or press <kbd>?</kbd>) — step-by-step for shortlist, export and sources.
 
 ## Data
 
@@ -92,8 +98,8 @@ constraint, not a limitation — see [`docs/offline.md`](docs/offline.md).
 
 | Format | How |
 |---|---|
-| **Single file** | Download [`app.html`](app.html) and open it. That's it. |
-| **Live demo** | <https://drsamonline.github.io/remedy-relationship-explorer/app.html> |
+| **Single file** | Download [`index.html`](docs/play/index.html) and open it. That's it. |
+| **Live demo** | <https://drsamonline.github.io/remedy-relationship-explorer/play/> |
 | **Installable PWA** | Open the live demo in Chrome/Edge → *Install app*. Works offline afterwards. |
 | **Windows (.exe)** | Built by CI — see [Releases](https://github.com/drsamonline/remedy-relationship-explorer/releases). |
 | **Android (.apk)** | Built by CI — see [Releases](https://github.com/drsamonline/remedy-relationship-explorer/releases). |

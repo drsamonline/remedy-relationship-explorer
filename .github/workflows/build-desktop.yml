@@ -32,7 +32,7 @@ jobs:
         working-directory: desktop
         run: |
           npm install
-          mkdir -p web && cp ../app.html web/index.html
+          mkdir -p web && cp ../docs/play/index.html web/index.html
       - name: Generate icons
         working-directory: desktop
         run: npx tauri icon ../assets/icon.svg || npx tauri icon ../assets/icon.png

@@ -1,6 +1,6 @@
 # Building the desktop and mobile apps
 
-The app itself is a single HTML file (`app.html`). The desktop and mobile builds simply wrap that
+The app itself is a single HTML file (`docs/play/index.html`). The desktop and mobile builds simply wrap that
 file — there is no separate codebase.
 
 > These builds are produced by GitHub Actions (see `.github/workflows/`). They are **not**
@@ -8,12 +8,12 @@ file — there is no separate codebase.
 
 ## Windows / macOS / Linux — Tauri
 
-Wraps `app.html` in a native webview. Produces a small `.exe` (NSIS/MSI), `.dmg` and AppImage/deb.
+Wraps `docs/play/index.html` in a native webview. Produces a small `.exe` (NSIS/MSI), `.dmg` and AppImage/deb.
 
 ```bash
 cd desktop
 npm install
-mkdir -p web && cp ../app.html web/index.html
+mkdir -p web && cp ../docs/play/index.html web/index.html
 npm run build          # or: npx tauri build
 ```
 
@@ -24,7 +24,7 @@ Requires Rust and (on Windows) the WebView2 runtime.
 ```bash
 cd mobile
 npm install
-mkdir -p www && cp ../app.html www/index.html
+mkdir -p www && cp ../docs/play/index.html www/index.html
 npx cap add android
 npx cap sync android
 npx cap open android    # then Build > Build APK(s)

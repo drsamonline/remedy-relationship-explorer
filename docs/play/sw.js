@@ -2,7 +2,7 @@
    Strategy: network-first for HTML (so updates land), cache-first for static assets.
    Bump VERSION on every release so old caches are purged. */
 const VERSION = 'rre-v3';
-const CORE = ['./', 'index.html', 'app.html', 'manifest.webmanifest', 'assets/icon.svg'];
+const CORE = ['./', 'index.html', 'manifest.webmanifest', 'assets/icon.svg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -38,7 +38,7 @@ self.addEventListener('fetch', e => {
         const copy = res.clone();
         caches.open(VERSION).then(c => c.put(req, copy)).catch(() => {});
         return res;
-      }).catch(() => caches.match(req).then(hit => hit || caches.match('app.html')))
+      }).catch(() => caches.match(req).then(hit => hit || caches.match('index.html')))
     );
     return;
   }
