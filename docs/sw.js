@@ -1,7 +1,7 @@
 /* Remedy Relationship Explorer — offline cache
    Strategy: network-first for HTML (so updates land), cache-first for static assets.
    Bump VERSION on every release so old caches are purged. */
-const VERSION = 'rre-v3';
+const VERSION = 'rre-v4';
 const CORE = ['./', 'index.html', 'app.html', 'manifest.webmanifest', 'assets/icon.svg'];
 
 self.addEventListener('install', e => {
