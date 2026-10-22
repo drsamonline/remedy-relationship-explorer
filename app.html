@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0b131d">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest?v=1.4.0">
 <link rel="icon" href="assets/icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Remedy Relationship Explorer — Boericke (1927)</title>
@@ -1559,7 +1559,7 @@ loop();
 </script>
 <script>
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
-  addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=1.4.0').catch(()=>{}));
 }
 </script>
 </body>
