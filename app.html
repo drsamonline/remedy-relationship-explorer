@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0b131d">
-<link rel="manifest" href="manifest.webmanifest?v=1.6.2">
+<link rel="manifest" href="manifest.webmanifest?v=1.6.3">
 <link rel="icon" href="assets/icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Remedy Relationship Explorer — Boericke (1927)</title>
@@ -75,7 +75,7 @@ canvas.drag{cursor:grabbing}
 #tip .tt-h{font-size:14px}
 #tip .tt-lbl{color:var(--dim);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;margin-top:8px}
 #tip .tt-hint{color:var(--accent);font-size:10px;margin-top:6px}#tip .tt-c{color:var(--dim);font-weight:400}#tip .tt-m{color:var(--dim2);font-size:11px;margin-top:2px}#tip .tt-k{color:var(--ink);opacity:.85;font-size:12px;line-height:1.5;margin-top:7px;max-width:300px;border-top:1px solid var(--line);padding-top:7px}
-#tip{position:absolute;pointer-events:auto;background:var(--bar);border:1px solid var(--line);border-radius:11px;padding:11px 14px;font-size:12.5px;display:none;z-index:15;box-shadow:var(--shadow);width:min(380px,86vw);max-height:min(64vh,480px);overflow-y:auto;overscroll-behavior:contain}
+#tip{position:absolute;pointer-events:auto;cursor:pointer;background:var(--bar);border:1px solid var(--line);border-radius:11px;padding:11px 14px;font-size:12.5px;display:none;z-index:15;box-shadow:var(--shadow);width:min(380px,86vw);max-height:min(64vh,480px);overflow-y:auto;overscroll-behavior:contain}
 aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;box-shadow:-1px 0 0 var(--line)}
 .tabs{display:flex;border-bottom:1px solid var(--line);flex:none}
 .tabs button{flex:1;background:none;border:0;color:var(--dim);cursor:pointer;font-size:12.5px;border-bottom:2px solid transparent;font-family:inherit;transition:.15s;padding:12px 8px;font-weight:520}
@@ -383,7 +383,7 @@ const degree = {}; nodes.forEach(n=>degree[n.id]=adj.get(n.id).length);
 const kcount = {}; nodes.forEach(n=>{ const k=n.kingdom||'unclassified'; kcount[k]=(kcount[k]||0)+1; });
 
 /* full-text index over keynotes */
-const APP_VERSION = '1.6.2';
+const APP_VERSION = '1.6.3';
 const FT = nodes.map(n=>({id:n.id, text:((n.id+' '+(n.common||'')+' '+(n.keynote||''))).toLowerCase()}));
 
 /* ---------- storage ---------- */
@@ -626,6 +626,7 @@ function detectClusters(){
 let colorBy = 'type';
 let tween=null;
 let tipLock=0;
+let tipNode=null, tipPinned=false;
 function capturePos(){ const m={}; for(const p of placed) m[p.node.id]={x:p.x,y:p.y}; return m; }
 function tweenFrom(before){ const to={}; for(const p of placed) to[p.node.id]={x:p.x,y:p.y}; tween={from:before,to,t0:performance.now(),dur:420}; }
 let clusterOf={}, clusterCount=0;
@@ -755,7 +756,7 @@ cv.addEventListener('mousemove',e=>{
     view.tx+=dx;view.ty+=dy;last={x:e.clientX,y:e.clientY}; dirty=true; }
   else hover(e);
 });
-cv.addEventListener('mouseleave',()=>{ if(Date.now()<tipLock) return;
+cv.addEventListener('mouseleave',()=>{ if(Date.now()<tipLock||tipPinned) return;
   setTimeout(()=>{ const t=document.getElementById('tip'); if(t && !t.matches(':hover')){ t.style.display='none'; cv.style.cursor='grab'; } }, 170);
   if(hoverId){hoverId=null;dirty=true;} });
 cv.addEventListener('click',e=>{ if(moved)return; pick(e); });
@@ -816,15 +817,28 @@ function world(e){const r=cv.getBoundingClientRect();
 function nearest(w){let best=null,bd=1e9;
   for(const p of placed){const d=(p.x-w.x)**2+(p.y-w.y)**2; if(d<bd){bd=d;best=p;}}
   return (best&&bd<=(best.r+7)**2)?best:null;}
-document.getElementById('tip').addEventListener('mouseleave',()=>{ if(Date.now()<tipLock) return; document.getElementById('tip').style.display='none'; });
+const tipEl=document.getElementById('tip');
+tipEl.addEventListener('mouseenter',()=>{ tipPinned=true; });
+tipEl.addEventListener('mouseleave',()=>{ tipPinned=false; tipEl.style.display='none'; });
+tipEl.addEventListener('click',()=>{ if(tipNode) openKeynote(tipNode); });
 function hover(e){
+  const tip=document.getElementById('tip');
+  if(tipPinned) return;                              // the user is reading the card
   if(Date.now()<tipLock) return;
-  const p=nearest(world(e)), tip=document.getElementById('tip');
-  const hid=p?p.node.id:null; if(hid!==hoverId){ hoverId=hid; dirty=true; }
-  if(p){ showTip(p.node, e.clientX, e.clientY); cv.style.cursor='pointer'; }
-  else { tip.style.display='none'; cv.style.cursor='grab'; }
+  const p=nearest(world(e));
+  if(!p){
+    const r=tip.getBoundingClientRect();
+    const heading = tip.style.display==='block' &&
+      e.clientX>=r.left-10 && e.clientX<=r.right+10 && e.clientY>=r.top-10 && e.clientY<=r.bottom+10;
+    if(heading) return;                              // pointer is on its way to the card
+    if(hoverId!==null){ hoverId=null; dirty=true; }
+    tip.style.display='none'; cv.style.cursor='grab'; return;
+  }
+  if(p.node.id!==hoverId){ hoverId=p.node.id; dirty=true; }
+  showTip(p.node, e.clientX, e.clientY); cv.style.cursor='pointer';
 }
 function showTip(n, cx, cy){
+  tipNode=n;
   const r=stage.getBoundingClientRect(), tip=document.getElementById('tip');
   const rel=relatedOf(n.id,false).size;
   const srcs=(()=>{const s=new Set(); for(const x of adj.get(n.id)) if(edgeOK(x.sources)) x.sources.forEach(k=>s.add(k)); return [...s].map(k=>k[0].toUpperCase()).sort().join('');})();
@@ -834,7 +848,7 @@ function showTip(n, cx, cy){
     + `<div class="tt-m">${n.kingdom?KNAME[n.kingdom]+' · ':''}${rel} related${srcs?` · ${srcs}`:''}</div>`
     + (kn?`<div class="tt-lbl">${n.keynote_src==='clarke'?'Clinical indications · Clarke 1900':'Keynotes · Boericke 1927'}</div>`
            + `<div class="tt-k">${kn}</div>`:'')
-    + `<div class="tt-hint">${full?'Click to open the reader':''}</div>`;
+    + `<div class="tt-hint">${full?'Click, or press <b>Enter</b>, to open the reader':''}</div>`;
   tip.style.display='block';
   let tx=cx-r.left+14, ty=cy-r.top+14;
   const tw=tip.offsetWidth||340, th=tip.offsetHeight||130;
@@ -1610,8 +1624,13 @@ document.getElementById('exportnb').onclick=exportNotebook;
 /* ---------- keyboard ---------- */
 addEventListener('keydown',e=>{
   const typing=/input|textarea/i.test(document.activeElement.tagName);
-  if(e.key==='Escape'){ if(bd.classList.contains('open')) closeModal(); else if(history.length&&mode==='focus') back(); return; }
+  if(e.key==='Escape'){
+    const t=document.getElementById('tip');
+    if(t.style.display==='block'){ t.style.display='none'; tipPinned=false; return; }
+    if(bd.classList.contains('open')) closeModal(); else if(history.length&&mode==='focus') back(); return; }
   if(typing) return;
+  if((e.key==='Enter'||e.key==='f'||e.key==='F') && document.getElementById('tip').style.display==='block' && tipNode){
+    e.preventDefault(); openKeynote(tipNode); return; }
   if(e.key==='/'){ e.preventDefault(); q.focus(); }
   else if(e.key==='?'){ openHelp(); }
   else if(e.key==='s'){ showTab('list'); }
@@ -1656,7 +1675,7 @@ loop();
 </script>
 <script>
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
-  addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=1.6.2').catch(()=>{}));
+  addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=1.6.3').catch(()=>{}));
 }
 </script>
 </body>
