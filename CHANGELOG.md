@@ -3,6 +3,25 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.5.0] — 2026-10-22
+
+### Fixed
+- **The hover tooltip did nothing on touch devices** — there is no hover on a phone. Tapping a node
+  now shows the same info card (guarded against the synthetic `mouseleave` that was wiping it).
+- Tooltip is now a proper **short remedy card**: name, common name, kingdom, related count, source
+  badges, a labelled **KEYNOTES · Boericke 1927** line with up to 300 characters, and a
+  *Click for the full text* hint. It also flips to stay on screen near an edge.
+
+### Added
+- **Minimap** for the network view (Tools → Minimap) with a live viewport rectangle.
+- **Curved edges** toggle for dense hubs (Tools → Curved edges).
+- **Animated transitions** when hopping between remedies.
+- **Screen-reader table** of every relationship for the selected remedy.
+- 12 more OCR remedy-name variants merged, recovering keynotes.
+
+### Data
+- Keynotes now **652 of 670** remedies (was 653/686) — remaining gaps are remedies no source describes.
+
 ## [1.4.1] — 2026-10-22
 
 ### Added
