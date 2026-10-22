@@ -3,6 +3,23 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.0] — 2026-10-22
+
+### Fixed
+- **Horizontal page scroll** — the hidden screen-reader table was widening the document on every
+  screen size. It is now properly clipped.
+- **The filters crushed the remedy panel** on short windows (a 768px-tall laptop left the panel
+  ~38px tall, hiding the keynote). Filters are now collapsible everywhere and collapse by default
+  when space is tight; the panel keeps a 240px minimum, so keynotes are visible at every size.
+- The "Showing N most-connected…" note sat above the keynote and squeezed it out on small phones;
+  it now sits at the foot of the panel.
+- Very small screens (320px): shorter graph, compact header, fewer node labels to avoid overlap.
+
+### Verified
+- Audited at 320, 390, 768, 1024, 1440 and 2560 px: **no overflow, no clipping, no console errors,
+  no failed requests**; the keynote is visible at every size.
+- 52 functional checks (desktop + mobile) pass.
+
 ## [1.5.0] — 2026-10-22
 
 ### Fixed
