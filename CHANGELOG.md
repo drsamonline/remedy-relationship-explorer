@@ -3,6 +3,25 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.0] — 2026-10-22
+
+### Added
+- Rich hover tooltip: name, common name, kingdom, related count, source badges and a keynote snippet.
+- System-aware theme (auto light/dark), plus an explicit high-contrast theme.
+- Adjustable text size.
+- Recent searches, remembered between sessions.
+- Print an entire shortlist (not just one remedy) and copy a formatted citation.
+- Vector **SVG export** of the current graph.
+- **Colour by** relationship type, kingdom, community cluster, or plant genus.
+- Community detection (label propagation) for the network view.
+- **Query expressions** in search: "complementary to Sepia", "inimical to Lachesis and complementary to Sulphur".
+- Three quiz modes: which-remedy, what-relationship, which-is-related.
+- Flashcards generated from keynotes.
+- **Export / import your data** (shortlist, notes, preferences) as a single JSON file.
+- First-run onboarding tour.
+- Light stemming in symptom search (itching → itch).
+- Force layout moved to a **Web Worker** where available, with a main-thread fallback.
+
 ## [1.0.0] — 2026-10-22
 
 ### Added
