@@ -1,0 +1,35 @@
+name: Build Android APK (Capacitor)
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+      - name: Prepare web asset
+        working-directory: mobile
+        run: |
+          npm install
+          mkdir -p www && cp ../app.html www/index.html
+      - name: Add Android platform
+        working-directory: mobile
+        run: npx cap add android
+      - name: Sync
+        working-directory: mobile
+        run: npx cap sync android
+      - name: Build debug APK
+        working-directory: mobile/android
+        run: ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: mobile/android/app/build/outputs/apk/debug/*.apk
