@@ -46,12 +46,16 @@ network access. Open it and it works — on a laptop, a tablet, or a phone, onli
   or more books.
 - **Provenance** — every relationship carries a superscript showing its source: **B** Boericke,
   **C** Clarke, **H** Hering.
+- **Query expressions** — ask things like *“inimical to Lachesis and complementary to Sulphur”*.
 - **Compare two remedies** — shared vs exclusive relationships and a Jaccard overlap score.
+- **Colour by** relationship type, kingdom, community cluster or plant genus.
+- **Flashcards** and three quiz modes for revision.
 - **Shortest path** between any two remedies.
 - **Quiz mode**, **study notebook** (export your starred remedies + notes as Markdown),
   **copy to clipboard**, **PNG export**, **printable remedy sheet**.
-- **Deep-linkable URLs**, keyboard shortcuts, screen-reader support, light/dark theme and a
-  **colour-blind-safe palette** with dashed edge patterns.
+- **Deep-linkable URLs**, keyboard shortcuts, screen-reader support, system-aware light/dark,
+  a high-contrast theme, adjustable text size, and a **colour-blind-safe palette** with dashed edge patterns.
+- **Export/import all your data** (shortlist, notes, preferences) as a single JSON file.
 - **Fully responsive** — phone, tablet, and large desktop.
 
 ## Data
