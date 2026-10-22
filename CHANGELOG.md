@@ -3,6 +3,22 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.4.0] — 2026-10-22
+
+### Fixed
+- **Keynotes were truncated.** The extractor capped them at ~210 characters, so every remedy showed
+  only a fragment. Keynotes are now the full source passage (median 260, up to ~1,400 characters).
+  Trailing page-header OCR artefacts are stripped.
+- **No way to read the full keynote.** The keynote box now has a **⤢ Full text** button that opens a
+  comfortable reader with *Copy text* and *Open remedy*.
+- The first-run **tutorial never appeared** — the autostart had been inserted inside the JSON-import
+  handler instead of the boot sequence. It now runs on first visit.
+
+### Added
+- **Guided tutorial** (7 steps) covering search, the two views, keynotes, shortlist & notebook export,
+  and sources. Auto-runs on first visit; reopen any time from **Tools → Tutorial**.
+- Clearer **start state** in the panel with *Try Sepia / Try Sulphur / Random remedy / ▶ Tutorial*.
+
 ## [1.3.0] — 2026-10-22
 
 ### Fixed
