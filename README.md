@@ -23,6 +23,21 @@
 
 ---
 
+## ⬇ Download
+
+| Platform | File | Link |
+|---|---|---|
+| **Windows** | `.exe` (installer) · `.msi` | [Download](https://github.com/drsamonline/remedy-relationship-explorer/releases/latest) |
+| **macOS** | `.dmg` | [Download](https://github.com/drsamonline/remedy-relationship-explorer/releases/latest) |
+| **Linux** | `.AppImage` · `.deb` | [Download](https://github.com/drsamonline/remedy-relationship-explorer/releases/latest) |
+| **Android** | `remedy-explorer.apk` | [Download](https://github.com/drsamonline/remedy-relationship-explorer/releases/latest) |
+| **Any device** | single-file `app.html` | [Open / save](https://drsamonline.github.io/remedy-relationship-explorer/app.html) |
+| **Installable PWA** | — | [Open the demo](https://drsamonline.github.io/remedy-relationship-explorer/app.html) → *Install app* |
+
+All builds are produced automatically by GitHub Actions from the same single HTML file —
+see [Releases](https://github.com/drsamonline/remedy-relationship-explorer/releases) and
+[`docs/build.md`](docs/build.md).
+
 ## What it is
 
 A study & reference tool for homeopathic **remedy relationships** — complementary, antidotal,
