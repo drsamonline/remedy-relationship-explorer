@@ -55,13 +55,15 @@ network access. Open it and it works — on a laptop, a tablet, or a phone, onli
   and collision-aware layout so nodes never overlap.
 - **Search by name *or symptom*** — the full-text search scans keynotes too, so
   “burning itching worse heat” finds Sulphur, Oenanthe, Selenium and Fagopyrum.
-- **Full keynotes** for 653 remedies, each labelled with its source — read the complete passage in a
+- **Full keynotes** for 652 remedies, each labelled with its source — read the complete passage in a
   built-in reader (⤢ Full text), not a truncated snippet.
 - **Filters** — by relationship type, by kingdom (mineral / plant / animal / nosode), by source
   book, and a **“corroborated only”** toggle that keeps just the relationships confirmed by two
   or more books.
 - **Provenance** — every relationship carries a superscript showing its source: **B** Boericke,
   **C** Clarke, **H** Hering, **A** Allen.
+- **Hover or tap a node** for a short remedy card (keynotes included); open the full text in the reader.
+- **Minimap**, **curved edges** and **animated transitions** for the network view.
 - **Query expressions** — ask things like *“inimical to Lachesis and complementary to Sulphur”*.
 - **Compare two remedies** — shared vs exclusive relationships and a Jaccard overlap score.
 - **Colour by** relationship type, kingdom, community cluster or plant genus.
