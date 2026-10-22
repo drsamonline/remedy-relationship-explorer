@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#0b131d">
-<link rel="manifest" href="manifest.webmanifest?v=1.5.0">
+<link rel="manifest" href="manifest.webmanifest?v=1.6.0">
 <link rel="icon" href="assets/icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Remedy Relationship Explorer — Boericke (1927)</title>
@@ -62,7 +62,7 @@ canvas.drag{cursor:grabbing}
 #mini{position:absolute;left:12px;bottom:12px;width:130px;height:95px;border-radius:10px;
     border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 72%,transparent);
     backdrop-filter:blur(6px);display:none;z-index:3;cursor:pointer}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
   #zoomctl{position:absolute;right:14px;bottom:14px;display:flex;flex-direction:column;gap:6px;z-index:4}
 #zoomctl button{width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);color:var(--ink);font-size:18px;cursor:pointer;backdrop-filter:blur(6px);display:grid;place-items:center;transition:.15s}
 #zoomctl button:hover{background:var(--soft)}
@@ -83,7 +83,7 @@ aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--
 .tabs button.on{color:var(--ink);border-bottom-color:var(--accent);border-bottom-width:2.5px}
 .tabpane{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
 .tabpane[hidden]{display:none}
-.filters{border-bottom:1px solid var(--line);flex:none;padding:15px 17px 13px}
+.filters{border-bottom:1px solid var(--line);flex:0 1 auto;overflow-y:auto;max-height:56%;padding:15px 17px 13px}
 .fh{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
 .legend .row{display:flex;align-items:center;gap:9px;cursor:pointer;font-size:12.5px;user-select:none;padding:5px 0;border-radius:7px}
 .legend .row:hover{color:var(--ink);background:color-mix(in srgb,var(--soft) 45%,transparent);margin:0 -7px;padding:5px 7px}
@@ -95,7 +95,7 @@ aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--
 .krow button.on{background:var(--soft);color:var(--ink);border-color:var(--soft)}
 #degrow{display:flex;align-items:center;gap:10px;margin-top:9px;font-size:12px;color:var(--dim)}
 #degrow input{flex:1;accent-color:var(--accent)}
-.profile{flex:1;display:flex;flex-direction:column;min-height:0}
+.profile{flex:1 1 auto;display:flex;flex-direction:column;min-height:240px}
 .profile .hd{padding:13px 16px 11px;border-bottom:1px solid var(--line);flex:none}
 .profile h2{margin:0;line-height:1.25;font-weight:640;font-size:18px;letter-spacing:-.01em}
 .profile .com{color:var(--dim);font-size:12.5px;margin-top:3px}
@@ -174,7 +174,16 @@ aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--
     #degrow{display:none!important}
     .res{grid-template-columns:1fr}
   }
-@media (max-width:560px){
+@media (max-width:380px){
+    #stage{flex:1 1 34%;min-height:24vh}
+    aside{max-height:66vh}
+    .bar{gap:6px;padding:7px 9px}
+    .brand h1{font-size:13px}
+    .seg button{padding:5px 8px;font-size:12px}
+    .profile h2{font-size:17px}
+    .rowbtns .pill{font-size:11.5px;padding:4px 8px}
+  }
+  @media (max-width:560px){
     .brand{display:none}
     .search{flex:1 1 120px}
     input[type=search]{width:100%}
@@ -201,13 +210,16 @@ aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--
 a{color:var(--accent)}
 @media (min-width:1500px){ aside{width:400px} .profile .body{padding:14px 17px 30px} }
 @media (min-width:1900px){ aside{width:440px} .brand h1{font-size:16px} }
-.ftog{display:none}
+.ftog{display:block;width:100%;margin-bottom:11px;text-align:left}
+.ftog::after{content:"▾";float:right;color:var(--dim2)}
+.filters.fcol .ftog::after{content:"▸"}
+.filters.fcol>*:not(.ftog){display:none!important}
 @media (max-width:880px){
     .ftog{display:block;width:100%;margin-bottom:11px;text-align:left}
     .ftog::after{content:"▾";float:right;color:var(--dim2)}
     .filters.fcol .ftog::after{content:"▸"}
     .filters.fcol .fh,.filters.fcol .legend,.filters.fcol .krow,
-    .filters.fcol .chk,.filters.fcol #resetf{display:none}
+    .filters.fcol>*:not(.ftog){display:none!important}
     .filters{padding:11px 14px}
     .legend{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
     .krow{flex-wrap:nowrap;overflow-x:auto;padding-bottom:5px;-webkit-overflow-scrolling:touch}
@@ -317,11 +329,11 @@ a{color:var(--accent)}
             <h2 id="sel-name">Select a remedy</h2>
             <div class="com" id="sel-com"></div>
             <div class="rowbtns" id="sel-btns"></div>
-            <div class="note" id="capnote"></div>
           </div>
           <div class="body" id="sel-body">
             <div class="empty">Search for a remedy, or click any node in the graph.</div>
           </div>
+          <div class="note" id="capnote"></div>
         </div>
       </section>
 
@@ -370,7 +382,7 @@ const degree = {}; nodes.forEach(n=>degree[n.id]=adj.get(n.id).length);
 const kcount = {}; nodes.forEach(n=>{ const k=n.kingdom||'unclassified'; kcount[k]=(kcount[k]||0)+1; });
 
 /* full-text index over keynotes */
-const APP_VERSION = '1.5.0';
+const APP_VERSION = '1.6.0';
 const FT = nodes.map(n=>({id:n.id, text:((n.id+' '+(n.common||'')+' '+(n.keynote||''))).toLowerCase()}));
 
 /* ---------- storage ---------- */
@@ -678,7 +690,7 @@ function draw(){
   for(const p of placed){
     const n=p.node;
     let show;
-    if(mode==='focus') show = true;
+    if(mode==='focus') show = !!p.center || selected===n || hoverId===n.id || r.height>250;
     else {
       const lt = view.scale<0.8 ? 70 : (view.scale<1.6 ? 38 : 0);
       show = (selected===n) || (neigh&&neigh.has(n.id)) || (hoverId===n.id) || degree[n.id]>=lt;
@@ -915,9 +927,9 @@ function renderPanel(){
     html+=`<div class="grp"><div class="gl"><span class="sw" style="background:var(--${t})"></span>${LABEL[t]}<span style="margin-left:auto;color:var(--dim2)">${items.length}</span></div>`;
     html+=items.map(([id,ss])=>`<span class="chip" data-id="${id}" title="${[...ss].map(s=>({boericke:'Boericke 1927',clarke:'Clarke 1900',hering:'Hering 1879',allen:'Allen 1898'}[s]||s)).join(' · ')}">${id}<sup>${[...ss].map(s=>s[0].toUpperCase()).sort().join('')}</sup></span>`).join('')+`</div>`; }
   bd.innerHTML=html||'<div class="empty">No recorded relationships.</div>';
-  { let t='<table class="sr-only"><caption>Relationships for '+selected.id+'</caption><thead><tr><th>Type</th><th>Remedy</th><th>Sources</th></tr></thead><tbody>';
+  { let t='<div class="sr-only"><table><caption>Relationships for '+selected.id+'</caption><thead><tr><th>Type</th><th>Remedy</th><th>Sources</th></tr></thead><tbody>';
     for(const ty of TYPES){ for(const [id,ss] of groups[ty]) t+='<tr><td>'+LABEL[ty]+'</td><td>'+id+'</td><td>'+[...ss].join(', ')+'</td></tr>'; }
-    t+='</tbody></table>'; bd.insertAdjacentHTML('beforeend',t); }
+    t+='</tbody></table></div>'; bd.insertAdjacentHTML('beforeend',t); }
   bd.querySelectorAll('.chip').forEach(c=>c.onclick=()=>open(c.dataset.id,true));
   document.getElementById('favbtn').onclick=()=>toggleFav(selected.id);
   document.getElementById('pthsrc').onclick=()=>openPath(selected.id);
@@ -1625,7 +1637,7 @@ colorBy = prefs.colorBy||'type';
 applyPrefs(); renderLegend(); renderKingdoms(); renderSources(); renderFavs();
 document.getElementById('minDeg').value=minDeg; syncCap();
 (function(){ const f=document.getElementById('filters'), t=document.getElementById('ftog');
-  if(window.innerWidth<=880) f.classList.add('fcol');
+  if(window.innerWidth<=880 || window.innerHeight<900) f.classList.add('fcol');
   t.onclick=()=>{ const c=f.classList.toggle('fcol'); t.setAttribute('aria-expanded', String(!c)); };
 })();
 size();
@@ -1639,7 +1651,7 @@ loop();
 </script>
 <script>
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
-  addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=1.5.0').catch(()=>{}));
+  addEventListener('load',()=>navigator.serviceWorker.register('sw.js?v=1.6.0').catch(()=>{}));
 }
 </script>
 </body>
