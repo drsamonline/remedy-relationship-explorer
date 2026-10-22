@@ -3,6 +3,16 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.2.0] — 2026-10-22
+
+### Added
+- **Fourth source: Allen's *Keynotes and Characteristics with Comparisons* (1898)** — 584 relationships
+  across 59 leading remedies. Corroborated (≥2 books) relationships rose from 807 to **928**.
+- **Visible dark-mode toggle** in the top bar (sun/moon), alongside the light/dark/auto theme option.
+
+### Changed
+- Dataset now **686 remedies / 7,786 relationships**; source filter, chips and citations include Allen (A).
+
 ## [1.1.0] — 2026-10-22
 
 ### Added
