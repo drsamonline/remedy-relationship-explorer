@@ -3,6 +3,18 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.3.0] — 2026-10-22
+
+### Fixed
+- **Mobile: the keynote was pushed below the fold.** The graph had a `min-height:44vh` floor that
+  squeezed the panel. The graph is now shorter on phones (30vh floor) and the panel larger, so a
+  remedy's keynotes are visible without scrolling.
+- Mobile panel: compact header and pill rows; larger, more readable keynote box.
+
+### Added
+- **Rewritten Help panel** with step-by-step sections: *Shortlist & your notes*, *Export & print*,
+  and *Where the books are* (source filter, chip superscripts B/C/H/A, corroborated-only, About).
+
 ## [1.2.1] — 2026-10-22
 
 ### Fixed
