@@ -1,4 +1,18 @@
-# Offline-only enhancement backlog
+# Enhancement backlog
+
+## Done (v1.1.0)
+- Rich tooltip with a short remedy detail box (keynote snippet, related count, source badges).
+- System-aware theme, high-contrast theme, adjustable text size.
+- Recent searches; light stemming in search.
+- Query expressions ("complementary to X and inimical to Y").
+- Colour by type / kingdom / cluster / family; community detection.
+- SVG (vector) export; print whole shortlist; copy citation.
+- Flashcards; three quiz modes.
+- Export / import all personal data as JSON.
+- First-run onboarding tour.
+- Web Worker for the force layout.
+
+## Still open (all offline)
 
 Every idea here runs entirely on-device: no server, no backend, no network call at runtime.
 
