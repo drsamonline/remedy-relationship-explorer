@@ -16,6 +16,9 @@
 - **Full-length keynotes** (no truncation) + a full-text reader with copy.
 - **7-step guided tutorial** (auto-runs on first visit) and a clearer start state.
 - Cleaner start state with example actions.
+- **Tooltip works on touch** (tap) and is a labelled short remedy card.
+- **Minimap**, **curved edges**, **animated hop transitions**, **screen-reader relationship table**.
+- 12 more OCR name variants merged; keynotes 652/670.
 
 ## Still open (all offline)
 
