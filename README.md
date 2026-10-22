@@ -57,6 +57,7 @@ network access. Open it and it works — on a laptop, a tablet, or a phone, onli
   a high-contrast theme, adjustable text size, and a **colour-blind-safe palette** with dashed edge patterns.
 - **Export/import all your data** (shortlist, notes, preferences) as a single JSON file.
 - **Fully responsive** — phone, tablet, and large desktop.
+- **In-app Help** (Tools → Help, or press <kbd>?</kbd>) — step-by-step for shortlist, export and sources.
 
 ## Data
 
