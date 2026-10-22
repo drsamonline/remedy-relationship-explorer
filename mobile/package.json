@@ -1,0 +1,19 @@
+{
+  "name": "remedy-relationship-explorer-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Android wrapper for Remedy Relationship Explorer",
+  "scripts": {
+    "prep": "mkdir -p www && cp ../app.html www/index.html",
+    "add:android": "npm run prep && cap add android",
+    "sync": "npm run prep && cap sync android",
+    "open": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6",
+    "@capacitor/core": "^6"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6"
+  }
+}
