@@ -3,6 +3,22 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.2] — 2026-10-22
+
+### Fixed
+- **Switching Network → Focus left the graph in a broken state**, which also made the info card
+  appear "not to work": a late Web Worker tick was overwriting the Focus layout with the Network
+  positions (66 nodes, no centre), so the node under the cursor sat off-canvas. The worker's
+  messages are now ignored unless we are genuinely in Network mode, and the worker is marked
+  inactive the moment you leave. Verified over three Network↔Focus round-trips.
+- Re-asserted the Focus layout on the next frame if it is ever found without a centre node.
+
+### Verified
+- 8 tooltip scenarios now pass (first hover, second hover, hide on leave, after search, after a
+  modal, in Network mode, **back in Focus mode**, and keynote completeness vs data).
+- 6 viewports (320–2560 px): no overflow, no clipping, no errors.
+- 54 functional checks: all pass.
+
 ## [1.6.1] — 2026-10-22
 
 ### Fixed
