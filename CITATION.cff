@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: Remedy Relationship Explorer
+message: "If you use this tool, please cite it as below."
+type: software
+authors:
+  - family-names: Momin
+    given-names: Sohil
+    email: sohilmomin2000@gmail.com
+    affiliation: MatNeo
+version: 1.0.0
+date-released: 2026-10-22
+license: LicenseRef-RRE-Custom
+repository-code: https://github.com/drsamonline/remedy-relationship-explorer
+abstract: >-
+  An offline, single-file explorer for homeopathic remedy relationships, built from
+  public-domain materia medicas (Boericke 1927, Clarke 1900, Hering 1879).
