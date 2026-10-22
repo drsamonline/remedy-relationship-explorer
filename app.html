@@ -11,6 +11,9 @@
 <title>Remedy Relationship Explorer — Boericke (1927)</title>
 <style>:root{--bg:#0b131d;--bar:#0f1a26;--panel:#101c28;--panel2:#16232f;--ink:#e8eef4;--dim:#7f95aa;--dim2:#5b7794;--line:#1e2c3a;--soft:#26384a;--accent:#60a5fa;--complementary:#34d399;--antidote:#f87171;--compare:#60a5fa;--inimical:#c084fc;--follows_well:#fbbf24;--shadow:0 12px 30px rgba(0,0,0,.45)}
 body.light{--bg:#f2f6fa;--bar:#ffffff;--panel:#ffffff;--panel2:#eef3f8;--ink:#12202e;--dim:#5b6b7c;--dim2:#8896a5;--line:#dce4ee;--soft:#dbe6f2;--accent:#2563eb;--shadow:0 12px 30px rgba(20,40,70,.14)}
+body.hc{--bg:#000;--bar:#05080d;--panel:#070b12;--panel2:#0d141d;--ink:#fff;--dim:#c3d0de;--dim2:#9fb0c2;--line:#3a4a5e;--soft:#22303f}
+body.hc canvas{image-rendering:auto}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 body.cb{--complementary:#009E73;--antidote:#D55E00;--compare:#0072B2;--inimical:#CC79A7;--follows_well:#E69F00}
 *{box-sizing:border-box}
 html,body{margin:0;height:100dvh;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;transition:background .2s,color .2s;font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
@@ -61,7 +64,8 @@ canvas.drag{cursor:grabbing}
 #zoomctl button:active{transform:scale(.94)}
 #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:var(--bar);border:1px solid var(--line);color:var(--ink);padding:9px 16px;border-radius:11px;font-size:13px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.22s;z-index:60}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-#tip{position:absolute;pointer-events:none;background:var(--bar);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12.5px;display:none;z-index:15;box-shadow:var(--shadow);max-width:300px}
+#tip .tt-h{font-size:13px}#tip .tt-c{color:var(--dim);font-weight:400}#tip .tt-m{color:var(--dim2);font-size:11px;margin-top:2px}#tip .tt-k{color:var(--dim);font-size:11.5px;line-height:1.45;margin-top:6px;max-width:284px}
+#tip{position:absolute;pointer-events:none;background:var(--bar);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:12.5px;display:none;z-index:15;box-shadow:var(--shadow);max-width:320px}
 aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;box-shadow:-1px 0 0 var(--line)}
 .tabs{display:flex;border-bottom:1px solid var(--line);flex:none}
 .tabs button{flex:1;background:none;border:0;color:var(--dim);cursor:pointer;font-size:12.5px;border-bottom:2px solid transparent;font-family:inherit;transition:.15s;padding:12px 8px;font-weight:520}
@@ -235,7 +239,18 @@ a{color:var(--accent)}
         <button data-act="export">Export image</button>
         <button data-act="print">Print remedy sheet</button>
         <button data-act="cb">Colour-blind palette</button>
-        <button data-act="theme">Light / dark</button>
+        <button data-act="theme">Theme: light / dark / auto</button>
+        <button data-act="fsdown">Text size −</button>
+        <button data-act="fsup">Text size +</button>
+        <button data-act="printsl">Print shortlist</button>
+        <button data-act="cite">Copy citation</button>
+        <button data-act="svg">Export SVG</button>
+        <button data-act="hc">High-contrast theme</button>
+        <button data-act="colorby">Colour by: type / kingdom / cluster</button>
+        <div class="sep2"></div>
+        <button data-act="flash">Flashcards</button>
+        <button data-act="expdata">Export my data (JSON)</button>
+        <button data-act="impdata">Import my data (JSON)</button>
         <div class="sep2"></div>
         <button data-act="about">About &amp; licence</button>
         <button data-act="help">Help &amp; shortcuts<span class="kbd">?</span></button>
@@ -342,7 +357,7 @@ const LS = {
 let favourites = new Set(LS.get('fav',[]));
 let recents    = LS.get('recent',[]);
 let notes      = LS.get('notes',{});
-let prefs = Object.assign({theme:'dark',cb:false,active:TYPES.slice(),kingdoms:[],src:['boericke','clarke','hering'],corr:false,minDeg:0,mode:'focus'}, LS.get('prefs2',{}));
+let prefs = Object.assign({theme:'auto',cb:false,hc:false,fs:1,colorBy:'type',recentQ:[],active:TYPES.slice(),kingdoms:[],src:['boericke','clarke','hering'],corr:false,minDeg:0,mode:'focus'}, LS.get('prefs2',{}));
 
 /* ---------- state ---------- */
 let mode=prefs.mode==='network'?'network':'focus', focusId=null, history=[], selected=null;
@@ -361,10 +376,14 @@ let highlight=null; // Set of ids for path highlight
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), stage=document.getElementById('stage');
 
 /* ---------- theme ---------- */
+const MQ_LIGHT = window.matchMedia && matchMedia('(prefers-color-scheme: light)');
+function isLight(){ return prefs.theme==='light' || (prefs.theme==='auto' && MQ_LIGHT && MQ_LIGHT.matches); }
 function applyPrefs(){
-  document.body.classList.toggle('light', prefs.theme==='light');
+  document.body.classList.toggle('light', isLight());
   document.body.classList.toggle('cb', !!prefs.cb);
-  document.querySelector('meta[name=theme-color]').setAttribute('content', prefs.theme==='light'?'#ffffff':'#0b131d');
+  document.body.classList.toggle('hc', !!prefs.hc);
+  document.body.style.zoom = (prefs.fs && prefs.fs!==1) ? prefs.fs : '';
+  document.querySelector('meta[name=theme-color]').setAttribute('content', isLight()?'#ffffff':'#0b131d');
   dirty=true;
 }
 function savePrefs(){ prefs.active=[...active]; prefs.kingdoms=[...activeK]; prefs.src=[...activeSrc]; prefs.corr=corrOnly; prefs.minDeg=minDeg;
@@ -393,6 +412,7 @@ addEventListener('orientationchange', ()=>setTimeout(onResize,180));
 if(window.visualViewport) window.visualViewport.addEventListener('resize', onResize);
 if(window.ResizeObserver) new ResizeObserver(onResize).observe(stage);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(onResize);
+if(MQ_LIGHT && MQ_LIGHT.addEventListener) MQ_LIGHT.addEventListener('change',()=>{ if(prefs.theme==='auto'){ applyPrefs(); size(); } });
 addEventListener('load', onResize);
 function syncCap(){ document.querySelectorAll('#cap button').forEach(x=>x.classList.toggle('on', +x.dataset.n===maxNeighbors)); }
 
@@ -451,13 +471,21 @@ function buildNetwork(){
     if(!visSet.has(e.source)||!visSet.has(e.target)) continue;
     const k=[e.source,e.target].sort().join('|')+'|'+e.type; if(seen.has(k)) continue; seen.add(k);
     links.push({s:map.get(e.source),t:map.get(e.target),type:e.type}); }
-  sim={nodes:[...map.values()],links,alpha:1,done:false};
+  sim={nodes:[...map.values()],links,alpha:1,done:false,worker:false};
+  if(workerReady){
+    try{ const ix=new Map(sim.nodes.map((n,i)=>[n.id,i]));
+      sim.worker=true;
+      worker.postMessage({cmd:'init',nodes:sim.nodes.map(n=>({x:n.x,y:n.y,vx:0,vy:0,r:n.r})),
+        links:sim.links.map(l=>({s:ix.get(l.s.id),t:ix.get(l.t.id)}))});
+    }catch(e){ sim.worker=false; }
+  }
   placed=sim.nodes.map(n=>({node:n,x:n.x,y:n.y,r:n.r}));
   edges=sim.links.map(l=>({a:{x:l.s.x,y:l.s.y,id:l.s.id},b:{x:l.t.x,y:l.t.y,id:l.t.id},type:l.type}));
   document.getElementById('capnote').style.display='none';
   fit(); dirty=true;
 }
 function stepNetwork(){
+  if(sim.worker) return;
   const ns=sim.nodes, links=sim.links;
   if(sim.alpha>0.006){
     for(let i=0;i<ns.length;i++){ const a=ns[i];
@@ -509,6 +537,61 @@ function fit(){
   view.tx=r.width/2-(b2.x0+b2.x1)/2*sc; view.ty=r.height/2-(b2.y0+b2.y1)/2*sc; dirty=true;
 }
 
+/* ---------- off-thread force layout (falls back to main thread) ---------- */
+let worker=null, workerReady=false;
+(function(){
+  try{
+    const wsrc = "onmessage=function(e){var d=e.data;if(d.cmd==='init'){self.N=d.nodes;self.L=d.links;self.alpha=1;self.run=true;tick();}if(d.cmd==='stop'){self.run=false;}};"
+      + "function tick(){var N=self.N,L=self.L,i,j,a,b,dx,dy,d2,f,dd,fx,fy;"
+      + "for(i=0;i<N.length;i++){a=N[i];for(j=i+1;j<N.length;j++){b=N[j];dx=b.x-a.x;dy=b.y-a.y;d2=dx*dx+dy*dy;"
+      + "if(d2<0.01){dx=Math.random()-.5;dy=Math.random()-.5;d2=.01;}if(d2>140000)continue;"
+      + "f=4200/d2;dd=Math.sqrt(d2);fx=dx/dd*f;fy=dy/dd*f;a.vx-=fx;a.vy-=fy;b.vx+=fx;b.vy+=fy;}}"
+      + "for(i=0;i<L.length;i++){var s=N[L[i].s],t=N[L[i].t];dx=t.x-s.x;dy=t.y-s.y;dd=Math.sqrt(dx*dx+dy*dy)||.01;"
+      + "f=(dd-115)*0.02;fx=dx/dd*f;fy=dy/dd*f;s.vx+=fx;s.vy+=fy;t.vx-=fx;t.vy-=fy;}"
+      + "for(i=0;i<N.length;i++){var n=N[i];n.vx+=-n.x*0.012;n.vy+=-n.y*0.012;n.vx*=0.84;n.vy*=0.84;"
+      + "n.x+=n.vx*self.alpha;n.y+=n.vy*self.alpha;var m=Math.sqrt(n.x*n.x+n.y*n.y);if(m>1600){n.x*=1600/m;n.y*=1600/m;}}"
+      + "for(i=0;i<N.length;i++){a=N[i];for(j=i+1;j<N.length;j++){b=N[j];dx=b.x-a.x;dy=b.y-a.y;dd=Math.sqrt(dx*dx+dy*dy)||.01;"
+      + "var mn=a.r+b.r+10;if(dd<mn){var p=(mn-dd)*0.5,ux=dx/dd,uy=dy/dd;a.x-=ux*p;a.y-=uy*p;b.x+=ux*p;b.y+=uy*p;}}}"
+      + "self.alpha*=0.98;postMessage({alpha:self.alpha,pos:N.map(function(n){return [n.x,n.y];})});"
+      + "if(self.alpha>0.006&&self.run)setTimeout(tick,16);}";
+    worker=new Worker(URL.createObjectURL(new Blob([wsrc],{type:'text/javascript'})));
+    worker.onmessage=function(e){ const d=e.data; if(!sim||!sim.worker) return;
+      const ns=sim.nodes; for(let i=0;i<ns.length&&i<d.pos.length;i++){ ns[i].x=d.pos[i][0]; ns[i].y=d.pos[i][1]; }
+      sim.alpha=d.alpha;
+      placed=ns.map(n=>({node:n,x:n.x,y:n.y,r:n.r}));
+      edges=sim.links.map(l=>({a:{x:l.s.x,y:l.s.y,id:l.s.id},b:{x:l.t.x,y:l.t.y,id:l.t.id},type:l.type}));
+      dirty=true; };
+    workerReady=true;
+  }catch(e){ workerReady=false; }
+})();
+function stopWorker(){ if(workerReady&&worker&&sim&&sim.worker){ try{ worker.postMessage({cmd:'stop'}); }catch(e){} } }
+
+/* ---------- clustering & colour-by ---------- */
+const KCOL={mineral:'#8ab4f8',plant:'#4ade80',animal:'#fb923c',nosode:'#e879f9',unclassified:'#94a3b8'};
+function detectClusters(){
+  const label={}; nodes.forEach(n=>label[n.id]=n.id);
+  for(let it=0; it<10; it++){
+    let changed=false;
+    const order=[...nodes].sort(()=>Math.random()-0.5);
+    for(const n of order){
+      const cnt={}; for(const {o} of adj.get(n.id)) cnt[label[o.id]]=(cnt[label[o.id]]||0)+1;
+      let best=label[n.id], bc=cnt[label[n.id]]||0;
+      for(const k in cnt) if(cnt[k]>bc){ bc=cnt[k]; best=k; }
+      if(best!==label[n.id]){ label[n.id]=best; changed=true; }
+    }
+    if(!changed) break;
+  }
+  const uniq=[...new Set(Object.values(label))], map={}; uniq.forEach((k,i)=>map[k]=i);
+  const out={}; for(const id in label) out[id]=map[label[id]];
+  return out;
+}
+let colorBy = 'type';
+let clusterOf={}, clusterCount=0;
+function clusterColor(i){ return `hsl(${(i*137.508)%360},58%,62%)`; }
+function familyOf(n){ return n.kingdom==='plant' ? n.id.split(' ')[0] : (n.kingdom||'unclassified'); }
+function familyColor(id){ let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))|0; h=((h%360)+360)%360; return `hsl(${h},55%,62%)`; }
+function ensureClusters(){ if(!clusterCount){ clusterOf=detectClusters(); clusterCount=new Set(Object.values(clusterOf)).size; } }
+
 /* ---------- draw ---------- */
 const DASH={complementary:[],antidote:[6,4],compare:[1,4],inimical:[9,4,2,4],follows_well:[13,5]};
 function cssv(name){ return getComputedStyle(document.body).getPropertyValue(name).trim(); }
@@ -544,7 +627,13 @@ function draw(){
       ctx.fillStyle=hexA(isC?'#ffffff':'#60a5fa', isC?0.16:0.24); ctx.fill(); }
     ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283);
     ctx.globalAlpha = dim?0.28:1;
-    ctx.fillStyle = hot?hotCol : isC?centerCol : near?nearCol : (degree[n.id]>=25?hubCol:nodeCol);
+    let fill;
+    if(hot) fill=hotCol; else if(isC) fill=centerCol; else if(near) fill=nearCol;
+    else if(colorBy==='kingdom') fill=KCOL[n.kingdom||'unclassified'];
+    else if(colorBy==='cluster') fill=clusterColor(clusterOf[n.id]||0);
+    else if(colorBy==='family') fill=familyColor(familyOf(n));
+    else fill = degree[n.id]>=25?hubCol:nodeCol;
+    ctx.fillStyle = fill;
     ctx.fill();
     if(hot){ ctx.strokeStyle=hotCol; ctx.lineWidth=1.5/view.scale; ctx.stroke(); }
     ctx.globalAlpha=1;
@@ -634,10 +723,15 @@ function nearest(w){let best=null,bd=1e9;
 function hover(e){
   const p=nearest(world(e)), tip=document.getElementById('tip');
   const hid=p?p.node.id:null; if(hid!==hoverId){ hoverId=hid; dirty=true; }
-  if(p){ const r=stage.getBoundingClientRect();
+  if(p){ const r=stage.getBoundingClientRect(), n=p.node;
+    const rel=relatedOf(n.id,false).size;
+    const srcs=(()=>{const s=new Set(); for(const x of adj.get(n.id)) if(edgeOK(x.sources)) x.sources.forEach(k=>s.add(k)); return [...s].map(k=>k[0].toUpperCase()).sort().join('');})();
+    const kn=(n.keynote||'').slice(0,170);
     tip.style.display='block'; tip.style.left=(e.clientX-r.left+14)+'px'; tip.style.top=(e.clientY-r.top+14)+'px';
-    tip.innerHTML=`<b>${p.node.id}</b>`+(p.node.common?` <span style="color:var(--dim)">· ${p.node.common}</span>`:'')
-      +(p.node.kingdom?` <span style="color:var(--dim2)">· ${KNAME[p.node.kingdom]||''}</span>`:'');
+    tip.innerHTML =
+      `<div class="tt-h"><b>${n.id}</b>${n.common?` <span class="tt-c">${n.common}</span>`:''}</div>`
+      + `<div class="tt-m">${n.kingdom?KNAME[n.kingdom]+' · ':''}${rel} related${srcs?` · ${srcs}`:''}</div>`
+      + (kn?`<div class="tt-k">${kn}${(n.keynote||'').length>170?'…':''}</div>`:'');
     cv.style.cursor='pointer';
   } else { tip.style.display='none'; cv.style.cursor='grab'; }
 }
@@ -804,7 +898,7 @@ function renderKingdoms(){
 }
 
 /* ---------- mode ---------- */
-function setMode(m){
+function setMode(m){ if(m!=='network') stopWorker();
   mode=m;
   document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x.dataset.m===m));
   document.getElementById('degrow').style.display=(m==='network')?'flex':'none';
@@ -822,14 +916,54 @@ function nameMatches(s){ const ex=[],pre=[],inc=[];
     if(id===s) ex.push(n); else if(id.startsWith(s)) pre.push(n);
     else if(id.includes(s)||(n.common||'').toLowerCase().includes(s)) inc.push(n); }
   return [...ex,...pre.sort((a,b)=>degree[b.id]-degree[a.id]),...inc]; }
+function stem(t){ return t.length>5 ? t.replace(/(ing|ings|ed|es|s)$/,'') : t; }
 function ftMatches(tokens,exclude){ const out=[];
+  const stems=tokens.map(stem);
   for(const f of FT){ if(exclude.has(f.id)) continue;
-    let c=0; for(const t of tokens) if(f.text.includes(t)) c++;
+    let c=0; for(let i=0;i<tokens.length;i++) if(f.text.includes(tokens[i]) || (stems[i].length>3 && f.text.includes(stems[i]))) c++;
     if(c>0) out.push({n:idx.get(f.id),c}); }
   out.sort((a,b)=> b.c-a.c || degree[b.n.id]-degree[a.n.id]);
   return out.map(x=>x.n); }
+function typeFromWord(w){ w=w.toLowerCase();
+  if(w.startsWith('complement')) return 'complementary';
+  if(w.startsWith('antidot')) return 'antidote';
+  if(w.startsWith('inimic')||w.startsWith('incompat')) return 'inimical';
+  if(w.startsWith('follow')) return 'follows_well';
+  if(w.startsWith('compare')||w.startsWith('similar')) return 'compare';
+  return null; }
+function parseQuery(s){
+  const parts=s.split(/\band\b/i); const out=[];
+  for(const p of parts){
+    const m=p.trim().match(/^(complementary|antidotal|antidote|inimical|incompatible|compare|similar|follows? well)\s+to\s+(.+)$/i);
+    if(!m) return null;
+    const t=typeFromWord(m[1]); const id=findId(m[2]);
+    if(!t||!id) return null;
+    out.push({type:t,id});
+  }
+  return out.length?out:null; }
+function runQuery(clauses){
+  let set=null;
+  for(const c of clauses){
+    const ids=new Set();
+    for(const x of adj.get(c.id)) if(x.type===c.type && edgeOK(x.sources)) ids.add(x.o.id);
+    set = set? new Set([...set].filter(v=>ids.has(v))) : ids;
+  }
+  return set? [...set].sort((a,b)=>degree[b]-degree[a]) : [];
+}
 function runSearch(raw){
   const s=raw.trim().toLowerCase(); if(!s){ sugg.style.display='none'; sugItems=[]; return; }
+  const qc=parseQuery(raw);
+  if(qc){
+    const ids=runQuery(qc).slice(0,10);
+    sugItems=ids.map(id=>idx.get(id)); sugHl=0;
+    const desc=qc.map(c=>LABEL[c.type].toLowerCase()+' to '+c.id).join(' and ');
+    sugg.innerHTML=`<div class="k">Query · ${desc} · ${ids.length} match${ids.length===1?'':'es'}</div>`
+      + (ids.length? sugItems.map((n,i)=>`<div class="it ${i===0?'hl':''}" data-i="${i}" role="option">${n.id} <span class="c">${n.common||''}</span></div>`).join('')
+                  : '<div class="it" style="color:var(--dim)">no remedies match</div>');
+    sugg.style.display='block'; q.setAttribute('aria-expanded','true');
+    sugg.querySelectorAll('.it[data-i]').forEach(d=>d.onmousedown=()=>chooseSug(+d.dataset.i));
+    return;
+  }
   const tokens=s.split(/\s+/);
   const byName=nameMatches(s).slice(0,6);
   const seen=new Set(byName.map(n=>n.id));
@@ -849,22 +983,26 @@ function runSearch(raw){
 }
 function snippet(text,tokens){ const i=text.toLowerCase().indexOf(tokens[0]); if(i<0) return text.slice(0,110)+'…';
   const a=Math.max(0,i-30); return (a>0?'…':'')+text.slice(a,a+120)+'…'; }
-function chooseSug(i){ const n=sugItems[i]; if(!n) return; setMode('focus'); open(n.id,true); q.value=''; sugg.style.display='none'; q.setAttribute('aria-expanded','false'); }
+function chooseSug(i){ const n=sugItems[i]; if(!n) return; setMode('focus'); open(n.id,true); rememberQ(q.value); q.value=''; sugg.style.display='none'; q.setAttribute('aria-expanded','false'); }
+function rememberQ(t){ t=(t||'').trim(); if(t.length<2) return; prefs.recentQ=[t,...(prefs.recentQ||[]).filter(x=>x!==t)].slice(0,8); savePrefs(); }
 function hlSug(d){ sugHl=Math.max(0,Math.min(sugItems.length-1,sugHl+d));
   sugg.querySelectorAll('.it').forEach(e=>e.classList.toggle('hl',+e.dataset.i===sugHl));
   const el=sugg.querySelector('.it.hl'); if(el) el.scrollIntoView({block:'nearest'}); }
 q.addEventListener('input',()=>runSearch(q.value));
-q.addEventListener('keydown',e=>{ if(e.key==='ArrowDown'){e.preventDefault();hlSug(1);}
+q.addEventListener('keydown',e=>{ if(e.key==='Enter'&&q.value.trim()) rememberQ(q.value); if(e.key==='ArrowDown'){e.preventDefault();hlSug(1);}
   else if(e.key==='ArrowUp'){e.preventDefault();hlSug(-1);}
   else if(e.key==='Enter'){ e.preventDefault(); chooseSug(sugHl>=0?sugHl:0); }
   else if(e.key==='Escape'){ q.value=''; sugg.style.display='none'; q.blur(); } });
 q.addEventListener('blur',()=>setTimeout(()=>{sugg.style.display='none';q.setAttribute('aria-expanded','false');},150));
 function showRecents(){
   const items=recents.filter(id=>idx.has(id)).slice(0,8);
-  if(!items.length) return;
+  const qs=(prefs.recentQ||[]).slice(0,6);
+  if(!items.length && !qs.length) return;
   sugItems=items.map(id=>idx.get(id)); sugHl=0;
-  sugg.innerHTML='<div class="k">Recently viewed</div>'+sugItems.map((n,i)=>
-    `<div class="it ${i===0?'hl':''}" data-i="${i}" role="option">${n.id} <span class="c">${n.common||''}</span></div>`).join('');
+  sugg.innerHTML=(items.length?'<div class="k">Recently viewed</div>'+sugItems.map((n,i)=>
+    `<div class="it ${i===0?'hl':''}" data-i="${i}" role="option">${n.id} <span class="c">${n.common||''}</span></div>`).join(''):'')
+    +(qs.length?'<div class="k">Recent searches</div>'+qs.map(t=>`<div class="it" data-q="${t.replace(/"/g,'&quot;')}"><span class="c">⌕</span> ${t}</div>`).join(''):'');
+  sugg.querySelectorAll('.it[data-q]').forEach(d=>d.onmousedown=()=>{ q.value=d.dataset.q; runSearch(d.dataset.q); });
   sugg.style.display='block'; q.setAttribute('aria-expanded','true');
   sugg.querySelectorAll('.it').forEach(d=>d.onmousedown=()=>chooseSug(+d.dataset.i));
 }
@@ -893,7 +1031,20 @@ function doAction(a){
   else if(a==='export') exportPNG();
   else if(a==='print') printSheet();
   else if(a==='cb'){ prefs.cb=!prefs.cb; applyPrefs(); savePrefs(); }
-  else if(a==='theme'){ prefs.theme=prefs.theme==='light'?'dark':'light'; applyPrefs(); savePrefs(); }
+  else if(a==='theme'){ prefs.theme = prefs.theme==='dark'?'light':(prefs.theme==='light'?'auto':'dark');
+    applyPrefs(); savePrefs(); size(); toast('Theme: '+prefs.theme); }
+  else if(a==='fsup'){ prefs.fs=Math.min(1.4,(prefs.fs||1)+0.1); applyPrefs(); savePrefs(); size(); toast('Text '+Math.round(prefs.fs*100)+'%'); }
+  else if(a==='fsdown'){ prefs.fs=Math.max(0.85,(prefs.fs||1)-0.1); applyPrefs(); savePrefs(); size(); toast('Text '+Math.round(prefs.fs*100)+'%'); }
+  else if(a==='printsl') printShortlist();
+  else if(a==='svg') exportSVG();
+  else if(a==='hc'){ prefs.hc=!prefs.hc; applyPrefs(); savePrefs(); toast('High contrast: '+(prefs.hc?'on':'off')); }
+  else if(a==='colorby'){ ensureClusters();
+    colorBy = colorBy==='type'?'kingdom':(colorBy==='kingdom'?'cluster':(colorBy==='cluster'?'family':'type'));
+    prefs.colorBy=colorBy; savePrefs(); dirty=true; toast('Colour by '+colorBy+(colorBy==='cluster'?' ('+clusterCount+' clusters)':(colorBy==='family'?' (plant genera)':''))); }
+  else if(a==='flash') openFlash();
+  else if(a==='expdata') exportData();
+  else if(a==='impdata') importData();
+  else if(a==='cite') copyCitation();
   else if(a==='help') openHelp();
   else if(a==='about') openAbout();
 }
@@ -1033,7 +1184,66 @@ function bfs(a,b){
       qq.push(o.id); } }
   return null;
 }
-function openQuiz(){
+function openQuiz(){ quizModes(); }
+function quizModes(){
+  showModal(`<div class="mh"><h3>Quiz</h3><button data-close>×</button></div>
+  <div class="mb"><p style="margin:0 0 14px;color:var(--dim)">Choose a quiz mode.</p>
+    <button class="qopt" id="qm1"><b>Which remedy?</b><div style="color:var(--dim);font-size:12.5px;margin-top:3px">Given a keynote, name the remedy.</div></button>
+    <button class="qopt" id="qm2"><b>What relationship?</b><div style="color:var(--dim);font-size:12.5px;margin-top:3px">Given two remedies, name the link between them.</div></button>
+    <button class="qopt" id="qm3"><b>Which is related?</b><div style="color:var(--dim);font-size:12.5px;margin-top:3px">Which remedy is <i>complementary</i> to the one shown?</div></button>
+  </div>`);
+  document.getElementById('qm1').onclick=()=>openQuizType('keynote');
+  document.getElementById('qm2').onclick=()=>openQuizType('rel');
+  document.getElementById('qm3').onclick=()=>openQuizType('compl');
+}
+function openQuizType(kind){
+  const pool=nodes.filter(n=>adj.get(n.id).length>=3 && n.keynote);
+  if(!pool.length){ toast('Not enough data'); return; }
+  let score=0,total=0,target,correct,opts,question;
+  const el=()=>document.getElementById('qbody');
+  function next(){
+    if(kind==='keynote'){
+      target=pool[Math.floor(Math.random()*pool.length)]; correct=target.id;
+      question=`Which remedy matches this keynote?<div style="color:var(--dim);font-size:12.5px;line-height:1.55;margin-top:8px;font-style:italic">${target.keynote}</div>`;
+      const rel=new Set(adj.get(target.id).map(x=>x.o.id)); const wrong=[];
+      while(wrong.length<3){ const r=nodes[Math.floor(Math.random()*nodes.length)].id; if(r!==correct && !rel.has(r) && !wrong.includes(r)) wrong.push(r); }
+      opts=[correct,...wrong];
+    } else if(kind==='rel'){
+      const withRel=nodes.filter(n=>adj.get(n.id).length>=2 && adj.get(n.id).some(x=>edgeOK(x.sources)));
+      target=withRel[Math.floor(Math.random()*withRel.length)];
+      const cand=adj.get(target.id).filter(x=>edgeOK(x.sources));
+      const pick=cand[Math.floor(Math.random()*cand.length)];
+      correct=LABEL[pick.type];
+      question=`What relationship does the source record between <b>${target.id}</b> and <b>${pick.o.id}</b>?`;
+      const others=TYPES.map(t=>LABEL[t]).filter(l=>l!==correct);
+      opts=[correct,...others.sort(()=>Math.random()-.5).slice(0,3)];
+    } else {
+      const withCompl=nodes.filter(n=>adj.get(n.id).some(x=>x.type==='complementary'&&edgeOK(x.sources)));
+      target=withCompl[Math.floor(Math.random()*withCompl.length)];
+      const comps=[...new Set(adj.get(target.id).filter(x=>x.type==='complementary'&&edgeOK(x.sources)).map(x=>x.o.id))];
+      correct=comps[Math.floor(Math.random()*comps.length)];
+      question=`Which remedy is <b>complementary</b> to <b>${target.id}</b>?`;
+      const rel=new Set(adj.get(target.id).map(x=>x.o.id)); const wrong=[];
+      while(wrong.length<3){ const r=nodes[Math.floor(Math.random()*nodes.length)].id; if(r!==correct && !rel.has(r) && !wrong.includes(r)) wrong.push(r); }
+      opts=[correct,...wrong];
+    }
+    opts=opts.sort(()=>Math.random()-.5);
+    el().innerHTML=`<p style="margin:0 0 14px">${question}</p>`
+      + opts.map(o=>`<button class="qopt" data-o="${o}">${o}</button>`).join('')
+      + `<div id="qfb" style="margin-top:10px;font-size:13px"></div>`;
+    el().querySelectorAll('.qopt').forEach(b=>b.onclick=()=>{
+      total++; const right=b.dataset.o===correct; if(right) score++;
+      el().querySelectorAll('.qopt').forEach(x=>{ if(x.dataset.o===correct) x.classList.add('right');
+        else if(x===b) x.classList.add('wrong'); x.disabled=true; });
+      document.getElementById('qfb').innerHTML=`${right?'Correct.':'It was <b>'+correct+'</b>.'}
+        <button class="plain" id="qnext" style="margin-left:10px">Next →</button>`;
+      document.getElementById('qnext').onclick=next;
+    });
+  }
+  showModal(`<div class="mh"><h3>Quiz</h3><button data-close>×</button></div><div class="mb" id="qbody"></div>`);
+  next();
+}
+function openQuizOld(){
   const pool=nodes.filter(n=>adj.get(n.id).length>=3 && n.keynote);
   if(!pool.length){ showModal(`<div class="mh"><h3>Quiz</h3><button data-close>×</button></div><div class="mb">Not enough data.</div>`); return; }
   let score=0, total=0, target, correct, opts;
@@ -1073,6 +1283,99 @@ function exportPNG(){
   c.drawImage(cv,0,0);
   const a=document.createElement('a'); a.download=(focusId?focusId.replace(/\W+/g,'_'):'remedy')+'_graph.png';
   a.href=out.toDataURL('image/png'); a.click();
+}
+function copyCitation(){ if(!selected) return;
+  const n=selected, s=new Set();
+  for(const x of adj.get(n.id)) if(edgeOK(x.sources)) x.sources.forEach(k=>s.add(k));
+  const books={boericke:'Boericke, Pocket Manual of Homoeopathic Materia Medica (1927)',clarke:'Clarke, Dictionary of Practical Materia Medica (1900)',hering:'Hering, Guiding Symptoms of Our Materia Medica (1879)'};
+  const lines=[...s].map(k=>books[k]).filter(Boolean);
+  const txt=`${n.id}${n.common?' ('+n.common+')':''} — remedy relationships. Sources: ${lines.join('; ')||'—'}. Remedy Relationship Explorer.`;
+  navigator.clipboard.writeText(txt).then(()=>toast('Citation copied')).catch(()=>toast('Copy failed')); }
+function exportData(){
+  const data={app:'remedy-relationship-explorer',version:1,exported:new Date().toISOString(),
+    favourites:[...favourites],notes,prefs};
+  download('remedy-explorer-data.json', JSON.stringify(data,null,1), 'application/json');
+  toast('Data exported');
+}
+function importData(){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json';
+  inp.onchange=()=>{ const f=inp.files[0]; if(!f) return; const fr=new FileReader();
+    fr.onload=()=>{ try{ const d=JSON.parse(fr.result);
+        if(Array.isArray(d.favourites)){ favourites=new Set(d.favourites); LS.set('fav',[...favourites]); }
+        if(d.notes&&typeof d.notes==='object'){ notes=d.notes; LS.set('notes',notes); }
+        if(d.prefs&&typeof d.prefs==='object'){ prefs=Object.assign(prefs,d.prefs); LS.set('prefs2',prefs); }
+        colorBy=prefs.colorBy||'type'; applyPrefs(); renderLegend(); renderKingdoms(); renderSources();
+        renderFavs(); renderPanel(); layout(); size();
+if(!LS.get('tourDone')){
+  setTimeout(()=>{ showModal(`<div class="mh"><h3>Welcome</h3><button data-close>×</button></div>
+    <div class="mb">
+      <p style="margin:0 0 10px"><b>1 · Explore.</b> Every remedy is a node. Click one to see how it relates to others — complementary, antidotal, inimical, “follows well”, and similar.</p>
+      <p style="margin:0 0 10px"><b>2 · Search by symptom.</b> Type a name <i>or</i> symptom words — the search reads the keynotes too. Try “burning itching worse heat”.</p>
+      <p style="margin:0 0 10px"><b>3 · Study.</b> Star remedies to build a shortlist, add private notes, then export a Markdown notebook or print it.</p>
+      <p style="margin:0;color:var(--dim);font-size:13px">Everything works offline. Nothing leaves your device.</p>
+    </div>
+    <div class="mf"><button class="plain" id="tourgo">Start exploring</button></div>`);
+    document.getElementById('tourgo').onclick=()=>{ LS.set('tourDone',1); closeModal(); };
+  }, 900);
+} toast('Data imported');
+      }catch(e){ toast('Import failed'); } };
+    fr.readAsText(f); };
+  inp.click();
+}
+function openFlash(){
+  const pool=nodes.filter(n=>n.keynote && adj.get(n.id).length>=3);
+  if(!pool.length){ toast('Not enough data'); return; }
+  let cur=pool[Math.floor(Math.random()*pool.length)];
+  function render(reveal){
+    showModal(`<div class="mh"><h3>Flashcards</h3><button data-close>×</button></div>
+    <div class="mb">
+      <div class="fh" style="color:var(--dim);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Which remedy?</div>
+      <p style="font-size:14px;line-height:1.65;color:var(--ink)">${cur.keynote}</p>
+      ${reveal?`<p style="font-size:18px;font-weight:650;margin:16px 0 0">${cur.id}${cur.common?` <span style="color:var(--dim);font-weight:400;font-size:14px">· ${cur.common}</span>`:''}</p>`:''}
+    </div>
+    <div class="mf">
+      <button class="plain" data-close>Close</button>
+      ${reveal?`<button class="plain" id="flnext">Next →</button>`:`<button class="plain" id="flshow">Reveal</button>`}
+    </div>`);
+    const s=document.getElementById('flshow'); if(s) s.onclick=()=>render(true);
+    const n=document.getElementById('flnext'); if(n) n.onclick=()=>{ cur=pool[Math.floor(Math.random()*pool.length)]; render(false); };
+  }
+  render(false);
+}
+function exportSVG(){
+  const r=stage.getBoundingClientRect(), W=Math.round(r.width), H=Math.round(r.height);
+  const light=isLight();
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const col=t=>cssv('--'+t)||'#888';
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
+  s+=`<rect width="100%" height="100%" fill="${light?'#f2f6fa':'#0b131d'}"/>`;
+  for(const e of edges){
+    const x1=(e.a.x*view.scale+view.tx), y1=(e.a.y*view.scale+view.ty);
+    const x2=(e.b.x*view.scale+view.tx), y2=(e.b.y*view.scale+view.ty);
+    s+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${col(e.type)}" stroke-width="1" opacity=".5"/>`;
+  }
+  for(const p of placed){
+    const x=p.x*view.scale+view.tx, y=p.y*view.scale+view.ty, rr=Math.max(2,p.r*view.scale);
+    s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rr.toFixed(1)}" fill="${p.center?'#dbe8f4':(degree[p.node.id]>=25?'#7f9dc0':'#587591')}"/>`;
+    if(mode==='focus'||degree[p.node.id]>=30)
+      s+=`<text x="${x.toFixed(1)}" y="${(y+rr+12).toFixed(1)}" font-size="11" fill="${light?'#33475b':'#c7d6e6'}" text-anchor="middle" font-family="sans-serif">${esc(p.node.id)}</text>`;
+  }
+  s+=`</svg>`;
+  download('remedy-graph.svg', s, 'image/svg+xml'); toast('SVG exported');
+}
+function printShortlist(){
+  if(!favourites.size){ toast('Star some remedies first'); return; }
+  let h='';
+  for(const id of favourites){ const n=idx.get(id); if(!n) continue;
+    const g={}; TYPES.forEach(t=>g[t]=[]);
+    for(const x of adj.get(id)) if(edgeOK(x.sources)) g[x.type].push(x.o.id);
+    h+=`<h1 style="font-size:17px;margin:22px 0 2px">${n.id}</h1><div class="pc">${n.common||''}${n.kingdom?' · '+KNAME[n.kingdom]:''}</div>`;
+    if(n.keynote) h+=`<div class="kn">${n.keynote}</div>`;
+    if(notes[id]) h+=`<h3>Notes</h3><p>${notes[id].replace(/</g,'&lt;')}</p>`;
+    for(const t of TYPES){ const it=[...new Set(g[t])].sort(); if(it.length) h+=`<h3>${LABEL[t]} (${it.length})</h3><ul>${it.map(x=>`<li>${x}</li>`).join('')}</ul>`; }
+  }
+  h+=`<p style="margin-top:20px;color:#777;font-size:11px">Remedy Relationship Explorer · Boericke (1927), Clarke (1900), Hering (1879) · OCR-derived, verify against the printed text.</p>`;
+  document.getElementById('printarea').innerHTML=h; window.print();
 }
 function printSheet(){
   if(!selected){ doAction('help'); return; }
@@ -1132,6 +1435,7 @@ document.getElementById('src').innerHTML =
   + `© 2026 Dr Sohil Momin — free for study; <a href="#" id="liclink">licence</a>.<br>`
   + `<span style="opacity:.85">Chip superscripts: B / C / H. OCR-derived — verify against the printed text.</span>`;
 document.getElementById('liclink').onclick=e=>{ e.preventDefault(); openAbout(); };
+colorBy = prefs.colorBy||'type';
 applyPrefs(); renderLegend(); renderKingdoms(); renderSources(); renderFavs();
 document.getElementById('minDeg').value=minDeg; syncCap();
 (function(){ const f=document.getElementById('filters'), t=document.getElementById('ftog');
