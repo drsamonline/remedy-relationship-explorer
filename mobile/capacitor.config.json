@@ -1,0 +1,8 @@
+{
+  "appId": "in.drsamonline.remedygraph",
+  "appName": "Remedy Explorer",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": { "allowMixedContent": false },
+  "server": { "androidScheme": "https" }
+}
