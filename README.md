@@ -135,3 +135,24 @@ Full terms: [`LICENSE`](LICENSE) · FAQ: [`docs/licensing.md`](docs/licensing.md
 [sohilmomin2000@gmail.com](mailto:sohilmomin2000@gmail.com) · [@drsamonline](https://github.com/drsamonline)
 
 <div align="center"><sub>Built with care, and no dependencies.</sub></div>
+
+---
+
+## Built with Forge
+
+This repo is a **Forge** app and adopts the shared kits.
+
+- **Shared build workflow** — `.github/workflows/build-apps.yml` calls the reusable
+  build in [`drsamonline/app-builder`](https://github.com/drsamonline/app-builder).
+  On every push to `main` it builds a portable Windows **EXE** and a signed
+  Android **APK** and attaches them to the `app-latest` release, so these URLs
+  always track the newest build:
+
+  - `https://github.com/drsamonline/remedy-relationship-explorer/releases/latest/download/remedy-relationship-explorer-portable.exe`
+  - `https://github.com/drsamonline/remedy-relationship-explorer/releases/latest/download/remedy-relationship-explorer.apk`
+
+- **web-kit** — the shared offline-first runtime (`web-kit.js`, from
+  [`drsamonline/web-kit`](https://github.com/drsamonline/web-kit)) is vendored in
+  this repo, ready for the app to adopt on its next release.
+
+Built with [Forge](https://github.com/drsamonline/forge) by Dr Sohil Momin.
