@@ -4,6 +4,12 @@
 
 # Remedy Relationship Explorer
 
+<!-- shot:start -->
+
+![Screenshot](docs/shot.png)
+
+<!-- shot:end -->
+
 **An offline, single-file explorer for homeopathic remedy relationships — built from public-domain literature.**
 
 [![License](https://img.shields.io/badge/license-Custom%20(free%20use%20%C2%B7%20commercial%20requires%20licence)-blue.svg)](LICENSE)
