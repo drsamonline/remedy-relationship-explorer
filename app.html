@@ -25,7 +25,7 @@ html,body{margin:0;height:100dvh;background:var(--bg);color:var(--ink);-webkit-f
 .seg button:hover{color:var(--ink)}
 .seg button.on{background:var(--soft);color:var(--ink)}
 .search{position:relative;min-width:150px}
-input[type=search],input[type=text]{background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:8px 12px;border-radius:9px;width:230px;outline:none;font-size:13px;transition:.15s;font-family:inherit}
+input[type=search],input[type=text]{background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:8px 12px;border-radius:9px;max-width:230px;width:100%;outline:none;font-size:13px;transition:.15s;font-family:inherit}
 input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
 .sugg{position:absolute;top:42px;left:0;right:0;background:var(--panel2);border:1px solid var(--line);overflow:hidden;display:none;max-height:340px;overflow-y:auto;z-index:30;box-shadow:var(--shadow);border-radius:13px}
 .sugg .it{cursor:pointer;font-size:13px;border-bottom:1px solid var(--line);padding:9px 13px}
@@ -56,7 +56,7 @@ canvas{display:block;width:100%;height:100%;cursor:grab;outline:none}
 canvas:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
 canvas.drag{cursor:grabbing}
 .iconbtn{font-size:16px;line-height:1;padding:7px 10px}
-#mini{position:absolute;left:12px;bottom:12px;width:130px;height:95px;border-radius:10px;
+#mini{position:absolute;left:12px;bottom:12px;max-width:130px;width:100%;height:95px;border-radius:10px;
     border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 72%,transparent);
     backdrop-filter:blur(6px);display:none;z-index:3;cursor:pointer}
   .sr-only{position:absolute!important;top:0!important;left:0!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important;contain:strict!important}
@@ -73,7 +73,7 @@ canvas.drag{cursor:grabbing}
 #tip .tt-lbl{color:var(--dim);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;margin-top:8px}
 #tip .tt-hint{color:var(--accent);font-size:10px;margin-top:6px}#tip .tt-c{color:var(--dim);font-weight:400}#tip .tt-m{color:var(--dim2);font-size:11px;margin-top:2px}#tip .tt-k{color:var(--ink);opacity:.85;font-size:12px;line-height:1.5;margin-top:7px;max-width:300px;border-top:1px solid var(--line);padding-top:7px}
 #tip{position:absolute;pointer-events:auto;cursor:pointer;background:var(--bar);border:1px solid var(--line);border-radius:11px;padding:11px 14px;font-size:12.5px;display:none;z-index:15;box-shadow:var(--shadow);width:min(380px,86vw);max-height:min(64vh,480px);overflow-y:auto;overscroll-behavior:contain}
-aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;box-shadow:-1px 0 0 var(--line)}
+aside{max-width:362px;width:100%;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;box-shadow:-1px 0 0 var(--line)}
 .tabs{display:flex;border-bottom:1px solid var(--line);flex:none}
 .tabs button{flex:1;background:none;border:0;color:var(--dim);cursor:pointer;font-size:12.5px;border-bottom:2px solid transparent;font-family:inherit;transition:.15s;padding:12px 8px;font-weight:520}
 .tabs button:hover{color:var(--ink)}
@@ -149,7 +149,7 @@ aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--
 .help p,.help li{font-size:13px;line-height:1.6;color:var(--ink)}
 .help ul{margin:6px 0;padding-left:20px}
 .help kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:11.5px}
-@media (max-width:1020px){aside{width:318px}}
+@media (max-width:1020px){aside{max-width:318px;width:100%}}
 @media (max-width:880px){
     #tip{max-height:min(52vh,420px);width:min(340px,92vw)}
     .menu .drop{left:0;right:auto}
@@ -206,8 +206,8 @@ aside{width:362px;flex:none;background:var(--panel);border-left:1px solid var(--
 .notesbox:focus{border-color:var(--accent)}
 ::selection{background:color-mix(in srgb,var(--accent) 35%,transparent)}
 a{color:var(--accent)}
-@media (min-width:1500px){ aside{width:400px} .profile .body{padding:14px 17px 30px} }
-@media (min-width:1900px){ aside{width:440px} .brand h1{font-size:16px} }
+@media (min-width:1500px){ aside{max-width:400px;width:100%} .profile .body{padding:14px 17px 30px} }
+@media (min-width:1900px){ aside{max-width:440px;width:100%} .brand h1{font-size:16px} }
 .ftog{display:block;width:100%;margin-bottom:11px;text-align:left}
 .ftog::after{content:"▾";float:right;color:var(--dim2)}
 .filters.fcol .ftog::after{content:"▸"}
@@ -1759,6 +1759,31 @@ loop();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", add); else add();
 })();
+</script>
+
+<script>
+/* A SMOKE TEST, not a feature test: did the page come up, are the kits loaded, does storage work.
+   Open with ?test to see it. */
+window.__smokeTest = function () {
+  var out = [];
+  function ok(n, c) { out.push((c ? "PASS " : "FAIL ") + n); }
+  ok("the document rendered", !!document.body && document.body.children.length > 0);
+  ok("a heading is present", !!document.querySelector("h1, h2"));
+  ok("no script threw during load", !window.__bootError);
+  var kits = ["Export","Loom","CryptoKit","Case","Search","Srs","Game","Art","Audio","Ml","UI","Lan","Astro"];
+  var found = kits.filter(function (k) { return window[k]; });
+  ok("at least one kit is loaded (" + (found.join(", ") || "none") + ")", found.length > 0);
+  try { localStorage.setItem("__smoke","1"); ok("storage works", localStorage.getItem("__smoke") === "1"); localStorage.removeItem("__smoke"); }
+  catch (e) { ok("storage works", false); }
+  console.log(out.join("\n"));
+  if (location.search.indexOf("test") >= 0) {
+    var d = document.createElement("pre"); d.textContent = out.join("\n");
+    d.style.cssText = "position:fixed;left:0;right:0;bottom:0;background:#111;color:#eee;padding:12px;font:12px ui-monospace,monospace;z-index:99999;max-height:40vh;overflow:auto;white-space:pre-wrap";
+    document.body.appendChild(d);
+  }
+  return out;
+};
+window.addEventListener("error", function () { window.__bootError = true; });
 </script>
 </body>
 </html>
