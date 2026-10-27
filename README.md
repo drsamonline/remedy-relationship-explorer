@@ -12,7 +12,7 @@
 
 **An offline, single-file explorer for homeopathic remedy relationships — built from public-domain literature.**
 
-[![License](https://img.shields.io/badge/license-Custom%20(free%20use%20%C2%B7%20commercial%20requires%20licence)-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-informational.svg)](LICENSE)
 [![Made with](https://img.shields.io/badge/made%20with-vanilla%20JS-yellow.svg)](app.html)
 [![Offline](https://img.shields.io/badge/works-100%25%20offline-success.svg)](
 [![No backend](https://img.shields.io/badge/backend-none-lightgrey.svg)](
@@ -128,12 +128,11 @@ HTML file (Tauri for Windows, Capacitor for Android). See [`docs/build.md`](docs
 
 ## Licence
 
-**Free to use** for personal study and teaching. The **application code is © 2026 Dr Sohil Momin,
-all rights reserved**. Derivative works are permitted for non-commercial use with attribution.
-**Commercial use requires a paid licence.** **Educational institutions** may obtain a free or
-discounted licence on request.
+PolyForm Noncommercial 1.0.0 — free for any noncommercial purpose. Commercial use
+needs a licence from the author. See [`LICENSE`](LICENSE).
 
-Full terms: [`LICENSE`](LICENSE) · FAQ: [`docs/licensing.md`](docs/licensing.md)
+Educational institutions may obtain a free or discounted commercial licence on
+request. Full terms: [`LICENSE`](LICENSE) · FAQ: [`docs/licensing.md`](docs/licensing.md).
 
 ## Author
 
