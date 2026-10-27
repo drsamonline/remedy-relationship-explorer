@@ -32,9 +32,11 @@ jobs:
           echo "$SDK/platform-tools"           >> "$GITHUB_PATH"
           SM="$SDK/cmdline-tools/latest/bin/sdkmanager"
           [ -x "$SM" ] || SM="$(command -v sdkmanager)"
-          yes | "$SM" --licenses > /dev/null 2>&1 || true
-          "$SM" "platform-tools" "platforms;android-34" "build-tools;34.0.0" > /dev/null 2>&1 || true
-          echo "SDK=$SDK"; ls "$SDK" || true
+          yes | "$SM" --licenses > /dev/null 2>&1 \
+            || echo "::notice::the licence prompt was not accepted - it may already be accepted"
+          # F-34: a failed SDK install used to be swallowed, and the build then failed obscurely.
+          "$SM" "platform-tools" "platforms;android-34" "build-tools;34.0.0" > /dev/null 2>&1
+          echo "SDK=$SDK"; ls "$SDK" || echo "::warning::the SDK directory is not listable"
 
       - name: Prepare web asset
         working-directory: mobile
@@ -63,8 +65,10 @@ jobs:
       - name: Collect APK
         run: |
           mkdir -p out
-          find mobile/android/app/build/outputs -name '*.apk' -exec cp {} out/remedy-explorer.apk \; || true
-          ls -la out || true
+          # F-34: no APK used to mean a green step and an empty upload. Collect, then assert.
+          find mobile/android/app/build/outputs -name '*.apk' -exec cp {} out/remedy-explorer.apk \;
+          [ -s out/remedy-explorer.apk ] || { echo "::error::no APK was produced"; ls -la out; exit 1; }
+          ls -la out
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02   # was @v4
         with:

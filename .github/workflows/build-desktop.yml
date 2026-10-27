@@ -47,8 +47,9 @@ jobs:
           mkdir -p out
           find desktop/src-tauri/target/release/bundle -type f \
             \( -name '*.exe' -o -name '*.msi' -o -name '*.dmg' -o -name '*.AppImage' -o -name '*.deb' \) \
-            -exec cp {} out/ \; || true
-          ls -la out || true
+            -exec cp {} out/ \;
+          ls out/* >/dev/null 2>&1 || { echo "::error::no desktop bundle was produced"; ls -la out; exit 1; }
+          ls -la out
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02   # was @v4
         with:
           name: desktop-${{ matrix.os }}
