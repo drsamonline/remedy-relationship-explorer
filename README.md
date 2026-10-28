@@ -12,7 +12,7 @@
 
 **An offline, single-file explorer for homeopathic remedy relationships — built from public-domain literature.**
 
-[![License](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-informational.svg)](LICENSE)
+[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/license-PolyForm%20Noncommercial%201.0.0-informational.svg)](LICENSE)
 [![Made with](https://img.shields.io/badge/made%20with-vanilla%20JS-yellow.svg)](app.html)
 [![Offline](https://img.shields.io/badge/works-100%25%20offline-success.svg)](
 [![No backend](https://img.shields.io/badge/backend-none-lightgrey.svg)](
