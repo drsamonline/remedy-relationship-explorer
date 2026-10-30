@@ -79,11 +79,22 @@ const LEGACY = { rre_fav: JSON.stringify(['Arnica montana']), rre_notes: JSON.st
      JSON.stringify(Object.keys(w.localStorage)));
 
   /* ---- 4. nothing regressed: the shared export/restore block is intact ---- */
-  let threw2 = null;
-  try { if (typeof w.__exportAll === 'function') w.__exportAll(); else threw2 = new Error('__exportAll is missing'); }
-  catch (e) { threw2 = e; }
-  ok('the "Save my data" block still runs (it walks localStorage, so it sees "rre:" keys too)',
-     !threw2, threw2 && threw2.message);
+  // The app exports through its own exportData(), which builds the JSON from the
+  // state it hydrated out of the store and hands it to download(). Call that, and
+  // capture what it would have written. The previous version of this check called
+  // window.__exportAll(), a hook this app has never had - so it could never pass,
+  // and it proved nothing about the retrofit either way.
+  let threw2 = null, payload = null;
+  try {
+    if (typeof w.exportData !== 'function') throw new Error('exportData is missing');
+    const realDownload = w.download;
+    w.download = function (name, text) { payload = text; };
+    w.exportData();
+    w.download = realDownload;
+  } catch (e) { threw2 = e; }
+  ok('the "Save my data" export still runs, and carries the namespaced data',
+     !threw2 && !!payload && payload.indexOf('Aconitum napellus') >= 0,
+     threw2 ? threw2.message : (payload ? payload.slice(0, 60) : 'download() was never called'));
 }
 
 /* ---- 5. a fresh user (no legacy keys) writes only under the namespace ------ */
