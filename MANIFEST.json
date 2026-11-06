@@ -9,10 +9,10 @@
       "at": "2026-11-04T20:07:41Z"
     },
     "docs/index.html": {
-      "sha": "844088ecfbe35ccc3c02b8c8dd6732c8a33a6cf5",
+      "sha": "1c58d770269ab6a0696d7435d00ab01ebd162f5b",
       "producer": "bootstrap@2026-11-04",
       "class": "generated",
-      "at": "2026-11-04T20:07:42Z"
+      "at": "2026-11-06T10:53:31Z"
     },
     "docs/play/index.html": {
       "sha": "ec466a8174df10105eb6b71dcebd2e186de43993",
@@ -27,5 +27,5 @@
       "at": "2026-11-04T20:07:42Z"
     }
   },
-  "updated": "2026-11-04T20:07:42Z"
+  "updated": "2026-11-06T10:53:31Z"
 }
