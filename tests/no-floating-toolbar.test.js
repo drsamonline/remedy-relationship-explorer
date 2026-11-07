@@ -28,9 +28,20 @@ function ok(name, cond, detail) {
   else { fail++; console.log('FAIL  ' + name + (detail ? '  [' + detail + ']' : '')); }
 }
 
-const PAGES = ['app.html', 'docs/app.html', 'docs/play/index.html'];
+/* THE APP IS ONE FILE NOW. This listed three copies - app.html, docs/app.html and
+   docs/play/index.html - and read all three unconditionally, so when the two old copies
+   were deleted the test died with ENOENT before asserting anything. The page that ships
+   is docs/play/index.html; the others are history. Read what exists, and fail loudly if
+   the real one is missing rather than silently checking nothing. */
+const PAGES = ['docs/play/index.html'];
 const src = {};
-for (const p of PAGES) src[p] = fs.readFileSync(path.join(root, p), 'utf8');
+for (const p of PAGES) {
+  if (!fs.existsSync(path.join(root, p))) {
+    console.log('FAIL  ' + p + ' is missing - the shipped page must exist');
+    process.exit(1);
+  }
+  src[p] = fs.readFileSync(path.join(root, p), 'utf8');
+}
 
 /* ---- 1. no floating toolbar anywhere ------------------------------------- */
 for (const p of PAGES) {
@@ -38,14 +49,15 @@ for (const p of PAGES) {
   ok(p + ': no "four things" retrofit block', src[p].indexOf('THE FOUR THINGS') < 0);
 }
 
-/* ---- 2. the published copies ARE the app --------------------------------- */
-for (const p of PAGES.slice(1)) {
-  ok(p + ' is byte-identical to app.html', src[p] === src['app.html'],
-     'differs by ' + Math.abs(src[p].length - src['app.html'].length) + ' bytes');
+/* ---- 2. every copy that exists IS the app -------------------------------- */
+/* The byte-identical check existed because three copies drifted. There is one copy now,
+   so the check it can still make is that no stale duplicate has been reintroduced. */
+for (const p of ['app.html', 'docs/app.html']) {
+  ok(p + ' has not come back as a second copy', !fs.existsSync(path.join(root, p)));
 }
 
 /* ---- 3. the phone layout is actually fixed ------------------------------- */
-const app = src['app.html'];
+const app = src['docs/play/index.html'];
 const m880 = app.match(/@media \(max-width:880px\)\{([\s\S]*?)\n  \}/);
 ok('there is an 880px breakpoint to hold the phone rules', !!m880);
 if (m880) {
