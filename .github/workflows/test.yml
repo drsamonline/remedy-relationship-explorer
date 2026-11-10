@@ -36,3 +36,5 @@ jobs:
       # stops a floating toolbar and the 318px panel cap coming back.
       - name: No toolbar bolted on, and the phone layout fits
         run: node tests/no-floating-toolbar.test.js
+      - name: Every service worker precaches files that exist
+        run: node tests/service-worker.test.js

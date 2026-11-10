@@ -1,8 +1,12 @@
 /* Remedy Relationship Explorer — offline cache
    Strategy: network-first for HTML (so updates land), cache-first for static assets.
    Bump VERSION on every release so old caches are purged. */
-const VERSION = 'rre-v4';
-const CORE = ['./', 'index.html', 'app.html', 'manifest.webmanifest', 'assets/icon.svg'];
+const VERSION = 'rre-v6';
+/* Only files that exist in this directory. This list used to carry
+   'app.html' and 'manifest.webmanifest', neither of which is here: addAll()
+   rejects on the first 404, so the landing page's worker never installed and
+   the failure was swallowed by the register().catch(()=>{}) in index.html. */
+const CORE = ['./', 'index.html', 'icon.svg', 'assets/icon.svg'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
