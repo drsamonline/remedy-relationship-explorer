@@ -3,6 +3,24 @@
 All notable changes to this project are documented here.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## 1.1.0 — 2026-11-10
+
+**A support block, on the page and in the README.** UPI, Ko-fi, PayPal, the author's other books,
+the project index and the email address — the ask that every other repo in this fleet makes and
+this one did not. The landing page had no support section at all; it has one now, and the README
+carries the same words.
+
+**The app now says the version the repository says.** `APP_VERSION` inside the app was still
+`1.6.4` from the October line, while `VERSION` and the last tag said `1.0.1`: the footer of the app
+and the release it came from disagreed. Both are `1.1.0` now, and both service workers moved to a
+new cache name (`rre-v4` for the app, `rre-v7` for the landing page) so nobody is served the old
+build from cache.
+
+**Also in this line, since 1.0.1** — the legal and community files the fleet standard asks for
+(`NOTICE.md` with source attribution, `PRIVACY.md`, `DISCLAIMER.md`, `SECURITY.md`,
+`CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `CITATION.cff`), and a fix to the landing page's service
+worker, which precached a file that is not in the repository.
+
 ## 1.0.1 — 2026-10-30
 
 - Storage now goes through web-kit. The app vendored `web-kit.js` and never called it; `LS` delegates to `Loom.storage.namespace("rre")`, keeping `LS` as the app's own API so no call site changed. Keys written before this are still read (`rre_<key>`) and are dropped only once their value has landed under the namespaced key, so nobody's shortlist, notes or preferences are orphaned. If the kit is missing, the raw localStorage path still runs - guarded, not removed.

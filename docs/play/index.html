@@ -650,7 +650,7 @@ const degree = {}; nodes.forEach(n=>degree[n.id]=adj.get(n.id).length);
 const kcount = {}; nodes.forEach(n=>{ const k=n.kingdom||'unclassified'; kcount[k]=(kcount[k]||0)+1; });
 
 /* full-text index over keynotes */
-const APP_VERSION = '1.6.4';
+const APP_VERSION = '1.1.0';
 const FT = nodes.map(n=>({id:n.id, text:((n.id+' '+(n.common||'')+' '+(n.keynote||''))).toLowerCase()}));
 
 /* ---------- storage ----------

@@ -1,7 +1,7 @@
 /* Remedy Relationship Explorer — offline cache
    Strategy: network-first for HTML (so updates land), cache-first for static assets.
    Bump VERSION on every release so old caches are purged. */
-const VERSION = 'rre-v6';
+const VERSION = 'rre-v7';
 /* Only files that exist in this directory. This list used to carry
    'app.html' and 'manifest.webmanifest', neither of which is here: addAll()
    rejects on the first 404, so the landing page's worker never installed and

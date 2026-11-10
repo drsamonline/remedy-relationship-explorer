@@ -3,29 +3,53 @@
   "locked": false,
   "files": {
     "README.md": {
-      "sha": "ab2022d14f4e4390f5f6e20af0697b4e47c442de",
-      "producer": "bootstrap@2026-11-04",
-      "class": "generated",
-      "at": "2026-11-04T20:07:41Z"
+      "sha": "9298c15e0af1abbd36f80d6ff2b44c19d4148d46",
+      "producer": "audit-2026-11-10",
+      "class": "agent",
+      "at": "2026-11-10T12:04:27Z"
     },
     "docs/index.html": {
-      "sha": "f9ef1055db47b58f7710e3a0d8910c5f8b379284",
-      "producer": "bootstrap@2026-11-04",
-      "class": "generated",
-      "at": "2026-11-07T03:39:10Z"
+      "sha": "3b8ccb232fdb9a2839c8ecdc628f51183c4fb96c",
+      "producer": "audit-2026-11-10",
+      "class": "agent",
+      "at": "2026-11-10T12:04:27Z"
     },
     "docs/play/index.html": {
-      "sha": "ec466a8174df10105eb6b71dcebd2e186de43993",
-      "producer": "bootstrap@2026-11-04",
-      "class": "generated",
-      "at": "2026-11-04T20:07:42Z"
+      "sha": "d37f0be3f715cd716303fad09aa0134710bbdf93",
+      "producer": "audit-2026-11-10",
+      "class": "agent",
+      "at": "2026-11-10T12:04:27Z"
     },
     ".github/workflows/build-apps.yml": {
       "sha": "02eadfc4adf9647a7f883fc7af16518974be335c",
       "producer": "bootstrap@2026-11-04",
       "class": "canonical",
       "at": "2026-11-04T20:07:42Z"
+    },
+    "CHANGELOG.md": {
+      "sha": "ebea1d0b98d0479ec9e5c5c6c04d34da897b2b4f",
+      "producer": "audit-2026-11-10",
+      "class": "agent",
+      "at": "2026-11-10T12:04:27Z"
+    },
+    "VERSION": {
+      "sha": "9084fa2f716a7117829f3f32a5f4cef400e02903",
+      "producer": "audit-2026-11-10",
+      "class": "agent",
+      "at": "2026-11-10T12:04:27Z"
+    },
+    "docs/play/sw.js": {
+      "sha": "9989b9a1e14c331e3b5af9658c708c9a4e5b68f2",
+      "producer": "audit-2026-11-10",
+      "class": "agent",
+      "at": "2026-11-10T12:04:27Z"
+    },
+    "docs/sw.js": {
+      "sha": "7bad1bca14b18df65c97c83633b7d266cb510052",
+      "producer": "audit-2026-11-10",
+      "class": "agent",
+      "at": "2026-11-10T12:04:27Z"
     }
   },
-  "updated": "2026-11-07T03:39:10Z"
+  "updated": "2026-11-10T12:04:27Z"
 }

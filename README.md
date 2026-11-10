@@ -126,6 +126,22 @@ constraint, not a limitation — see [`docs/offline.md`](docs/offline.md).
 Desktop and Android builds are produced automatically by GitHub Actions from the same single
 HTML file (Tauri for Windows, Capacitor for Android). See [`docs/build.md`](docs/build.md).
 
+## Support
+
+One person's work: no company, no ads, no tracking, no paid tier beyond the commercial licence.
+If it saved you an afternoon, a contribution keeps the next one coming — any amount, or none.
+
+| | |
+|---|---|
+| **UPI** | `drsohilboi@ybl` |
+| **Ko-fi** | [ko-fi.com/matneo](https://ko-fi.com/matneo) |
+| **PayPal** | [paypal.me/drsohilmomin](https://paypal.me/drsohilmomin?locale.x=en_GB&country.x=IN) |
+| **Books** | [the author's other work](https://www.amazon.com/stores/author/B08ZT331LY/allbooks) |
+| **Elsewhere** | [all projects](https://drsamonline.github.io/) |
+| **Email** | [sohilmomin2000@gmail.com](mailto:sohilmomin2000@gmail.com) — bugs, corrections, requests |
+
+The same block sits in the footer of the [landing page](https://drsamonline.github.io/remedy-relationship-explorer/#support).
+
 ## Licence
 
 PolyForm Noncommercial 1.0.0 — free for any noncommercial purpose. Commercial use
